@@ -1,5 +1,5 @@
 <?php
-$title = htmlspecialchars($course['name']);
+$title = htmlspecialchars($course['title']);
 require_once __DIR__ . '/../layouts/header.php';
 require_once __DIR__ . '/../layouts/sidebar.php';
 ?>
@@ -28,7 +28,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
             <!-- Course Info -->
             <div class="md:col-span-2">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">
-                    <?= htmlspecialchars($course['name']) ?>
+                    <?= htmlspecialchars($course['title']) ?>
                 </h1>
 
                 <p class="text-gray-600 text-lg mb-6">
@@ -46,6 +46,14 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-600">Duration</p>
+                        <p class="font-semibold text-gray-800"><?= $course['duration_weeks'] ?? '-' ?> weeks</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-gray-600">Level</p>
+                        <p class="font-semibold text-gray-800"><?= $course['level'] ?? 'Beginner' ?></p>
+                    </div>
                     <div class="bg-gray-50 p-4 rounded-lg">
                         <p class="text-gray-600">Course ID</p>
                         <p class="font-semibold text-gray-800"><?= $course['id'] ?></p>
@@ -109,11 +117,11 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                     </div>
                     <div class="flex justify-between items-center py-2 border-b">
                         <span class="text-gray-600">Duration</span>
-                        <span class="font-semibold text-gray-800">-</span>
+                        <span class="font-semibold text-gray-800"><?= $course['duration_weeks'] ?? '-' ?> weeks</span>
                     </div>
                     <div class="flex justify-between items-center py-2">
                         <span class="text-gray-600">Level</span>
-                        <span class="font-semibold text-gray-800">Beginner</span>
+                        <span class="font-semibold text-gray-800"><?= $course['level'] ?? 'Beginner' ?></span>
                     </div>
                 </div>
 

@@ -30,7 +30,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
     <?php if (!empty($courses)): ?>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <?php foreach ($courses as $course): ?>
-                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden">
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden">
                     <!-- Course Image (Placeholder) -->
                     <div class="w-full h-48 bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
                         <span class="text-6xl">📚</span>
@@ -39,7 +39,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                     <!-- Course Content -->
                     <div class="p-6">
                         <h3 class="text-xl font-bold text-gray-800 mb-2 line-clamp-2">
-                            <?= htmlspecialchars($course['name']) ?>
+                            <?= htmlspecialchars($course['title']) ?>
                         </h3>
 
                         <p class="text-gray-600 text-sm mb-4 line-clamp-3">
