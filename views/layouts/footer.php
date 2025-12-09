@@ -1,10 +1,10 @@
-	</main>
+    </div> <!-- END WRAPPER -->
 
-	<footer class="bg-white border-t mt-8">
-		<div class="max-w-7xl mx-auto px-4 py-4 text-sm text-gray-600">
-			&copy; <?= date('Y') ?> MyApp. All rights reserved.
-		</div>
-	</footer>
+    <footer class="text-center py-4 bg-white shadow-inner mt-10">
+        <p class="text-gray-500 text-sm">
+            © <?= date('Y') ?> Admin Panel — All rights reserved.
+        </p>
+    </footer>
 
 </body>
 </html>

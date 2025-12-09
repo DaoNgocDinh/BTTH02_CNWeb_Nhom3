@@ -27,7 +27,7 @@ require_once __DIR__ . '/../layouts/header.php';
         $old = $_SESSION['old'] ?? [];
         ?>
 
-        <form method="POST" action="index.php?action=loginPost" class="space-y-5" novalidate>
+        <form method="POST" action="/BTTH02_CNWeb_Nhom3/login" class="space-y-5" novalidate>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input 
@@ -65,7 +65,7 @@ require_once __DIR__ . '/../layouts/header.php';
 
         <p class="text-center text-sm text-gray-600 mt-6">
             Chưa có tài khoản? 
-            <a href="index.php?action=register" 
+            <a href="/BTTH02_CNWeb_Nhom3/register" 
                class="text-blue-600 hover:underline font-medium">
                Đăng ký
             </a>

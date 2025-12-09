@@ -37,11 +37,11 @@ class AuthController {
             $_SESSION['flash'] = ['type' => 'success', 'message' => 'Đăng ký thành công. Đăng nhập để tiếp tục.'];
             // clear old input
             unset($_SESSION['old']);
-            header("Location: index.php?action=login");
+            header("Location: /BTTH02_CNWeb_Nhom3/login");
             exit;
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Đăng ký thất bại. Vui lòng thử lại.'];
-            header("Location: index.php?action=register");
+            header("Location: /BTTH02_CNWeb_Nhom3/register");
             exit;
         }
     }
@@ -58,7 +58,7 @@ class AuthController {
 
         if (!$user || !password_verify($password, $user['password'])) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Sai tài khoản hoặc mật khẩu'];
-            header('Location: index.php?action=login');
+            header('Location: /BTTH02_CNWeb_Nhom3/login');
             exit;
         }
 
@@ -76,11 +76,24 @@ class AuthController {
         // Lưu token vào cookie (HTTP-only)
         setcookie("token", $token, time() + 3600, "/");
 
+        // Lưu thông tin user vào session để kiểm tra truy cập phía server
+        $_SESSION['user'] = [
+            'id' => $user['id'],
+            'email' => $user['email'],
+            'username' => $user['username'],
+            'role' => $user['role']
+        ];
+
         // clear flash/old
         unset($_SESSION['flash']);
         unset($_SESSION['old']);
 
-        header("Location: index.php?action=profile");
+        // Đăng nhập xong chuyển hướng đến dashboard admin hoặc home
+        if ($user['role'] == 1) {
+            header("Location: /BTTH02_CNWeb_Nhom3/admin/dashboard");
+        } else {
+            header("Location: /BTTH02_CNWeb_Nhom3/");
+        }
         exit;
     }
 
@@ -88,6 +101,7 @@ class AuthController {
     public function logout() {
         setcookie("token", "", time() - 3600, "/");
         session_destroy();
-        header("Location: index.php?action=login");
+        header("Location: /BTTH02_CNWeb_Nhom3/login");
+        exit;
     }
 }
