@@ -12,7 +12,7 @@ class AdminController {
             header('Location: ' . BASE_URL . '/login');
             exit;
         }
-        if (($_SESSION['user']['role'] ?? 1) != 0) {
+        if (($_SESSION['user']['role'] ?? 0) != 2) {
             header('Location: ' . BASE_URL . '/');
             exit;
         }

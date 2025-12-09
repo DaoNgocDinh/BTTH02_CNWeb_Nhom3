@@ -27,11 +27,26 @@ require_once __DIR__ . '/../layouts/header.php';
 
         <div class="text-center">
             <h2 class="text-2xl font-bold mb-6 text-gray-900">Sẵn sàng bắt đầu?</h2>
-            <a href="index.php?action=courses" class="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-                Khám phá khóa học
-            </a>
+            <div class="flex gap-4 justify-center">
+                <?php if (isset($_SESSION['user'])): ?>
+                    <a href="<?= BASE_URL ?>/courses" class="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                        Khám phá khóa học
+                    </a>
+                    <a href="<?= BASE_URL ?>/dashboard" class="inline-block px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+                        Học của tôi
+                    </a>
+                <?php else: ?>
+                    <a href="<?= BASE_URL ?>/login" class="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                        Đăng nhập
+                    </a>
+                    <a href="<?= BASE_URL ?>/register" class="inline-block px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+                        Đăng ký
+                    </a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </div>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
+

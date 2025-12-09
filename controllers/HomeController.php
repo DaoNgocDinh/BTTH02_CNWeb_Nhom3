@@ -4,20 +4,25 @@ class HomeController
 {
     public function index()
     {
-        // If user is admin (role 0), redirect to admin dashboard
-        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']) && (int)$_SESSION['user']['role'] === 0) {
+        // If user is admin (role 2), redirect to admin dashboard
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']) && (int)$_SESSION['user']['role'] === 2) {
             header('Location: ' . BASE_URL . '/admin/dashboard');
             exit;
         }
 
-        // If user is logged in but not admin, redirect to courses/dashboard
+        // If user is logged in but not admin, show courses
         if (isset($_SESSION['user'])) {
-            header('Location: ' . BASE_URL . '/courses');
-            exit;
+            try {
+                $courses = \Course::getAll();
+                require_once __DIR__ . '/../views/courses/index.php';
+                exit;
+            } catch (Exception $e) {
+                require_once __DIR__ . '/../views/home/index.php';
+                exit;
+            }
         }
 
-        // Not logged in, redirect to login
-        header('Location: ' . BASE_URL . '/login');
-        exit;
+        // Not logged in - show welcome page
+        require_once __DIR__ . '/../views/home/index.php';
     }
 }

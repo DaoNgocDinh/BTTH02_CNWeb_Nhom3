@@ -53,8 +53,9 @@ try {
 			
 			<select name="role" class="px-4 py-2 border rounded-lg">
 				<option value="">All Roles</option>
-				<option value="0" <?= $role_filter === '0' ? 'selected' : '' ?>>Admin</option>
-				<option value="1" <?= $role_filter === '1' ? 'selected' : '' ?>>User</option>
+				<option value="0" <?= $role_filter === '0' ? 'selected' : '' ?>>User</option>
+				<option value="1" <?= $role_filter === '1' ? 'selected' : '' ?>>Teacher</option>
+				<option value="2" <?= $role_filter === '2' ? 'selected' : '' ?>>Admin</option>
 			</select>
 			
 			<button type="submit" class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
@@ -88,8 +89,8 @@ try {
 							<td class="px-6 py-4 text-gray-600"><?= htmlspecialchars($user['email'] ?? '') ?></td>
 							<td class="px-6 py-4"><?= htmlspecialchars($user['fullname'] ?? '') ?></td>
 							<td class="px-6 py-4">
-								<span class="<?= $user['role'] == 0 ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800' ?> px-3 py-1 rounded-full text-xs font-semibold">
-									<?= ($user['role'] == 0 ? 'Admin' : 'User') ?>
+								<span class="<?= $user['role'] == 2 ? 'bg-red-100 text-red-800' : ($user['role'] == 1 ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800') ?> px-3 py-1 rounded-full text-xs font-semibold">
+									<?= ($user['role'] == 2 ? 'Admin' : ($user['role'] == 1 ? 'Teacher' : 'User')) ?>
 								</span>
 							</td>
 							<td class="px-6 py-4 text-sm text-gray-600">

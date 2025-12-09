@@ -33,8 +33,9 @@ require_once __DIR__ . '/../../layouts/sidebar.php';
 				<div>
 					<label class="block text-sm font-semibold mb-2 text-gray-700">Role</label>
 					<select name="role" class="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-						<option value="0">Admin</option>
-						<option value="1" selected>User</option>
+						<option value="0" selected>User</option>
+						<option value="1">Teacher</option>
+						<option value="2">Admin</option>
 					</select>
 				</div>
 

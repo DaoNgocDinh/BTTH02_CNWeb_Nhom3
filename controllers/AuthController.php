@@ -89,7 +89,7 @@ class AuthController {
         unset($_SESSION['old']);
 
         // Đăng nhập xong chuyển hướng đến dashboard admin hoặc home
-        if ($user['role'] == 1) {
+        if ($user['role'] == 2) {
             header("Location: /BTTH02_CNWeb_Nhom3/admin/dashboard");
         } else {
             header("Location: /BTTH02_CNWeb_Nhom3/");
