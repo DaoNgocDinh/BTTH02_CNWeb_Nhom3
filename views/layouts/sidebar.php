@@ -1,70 +1,64 @@
-<!-- TOP NAVBAR -->
-<nav class="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white px-6 py-4 shadow-lg">
-    <div class="flex items-center justify-between">
+<nav class="navbar">
+    <div class="navbar-container">
 
-        <!-- LEFT: Logo -->
-        <a href="<?= BASE_URL ?>/" class="text-2xl font-bold tracking-wide hover:text-blue-400 transition">
-            MY APP
+        <a href="<?= BASE_URL ?>/" class="navbar-logo">
+            2TĐ
         </a>
 
-        <!-- RIGHT: Menu Items & User Info -->
-        <div class="flex items-center gap-6 text-sm font-medium">
+        <div class="navbar-right">
 
             <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] == 2): ?>
-                <!-- ADMIN NAVIGATION -->
-                <a href="<?= BASE_URL ?>/admin/dashboard"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    📊 <span>Dashboard</span>
+                <a href="<?= BASE_URL ?>/admin/dashboard" class="nav-link">
+                    📊 <span>Trang chủ</span>
                 </a>
-
-                <a href="<?= BASE_URL ?>/admin/users"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    👥 <span>Users</span>
+                <a href="<?= BASE_URL ?>/admin/users" class="nav-link">
+                    👥 <span>Quản lý người dùng</span>
                 </a>
-
-                <a href="<?= BASE_URL ?>/admin/categories"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    📂 <span>Categories</span>
+                <a href="<?= BASE_URL ?>/admin/categories" class="nav-link">
+                    📂 <span>Quản lý khóa học</span>
                 </a>
-
-                <a href="<?= BASE_URL ?>/admin/statistics"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    📈 <span>Statistics</span>
+                <a href="<?= BASE_URL ?>/admin/statistics" class="nav-link">
+                    📈 <span>Thống kê</span>
                 </a>
             <?php else: ?>
-                <!-- STUDENT NAVIGATION -->
-                <a href="<?= BASE_URL ?>/dashboard"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    🏠 <span>Dashboard</span>
+                <a href="<?= BASE_URL ?>/dashboard" class="nav-link">
+                    🏠 <span>Trang chủ</span>
                 </a>
-
-                <a href="<?= BASE_URL ?>/courses"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    📚 <span>Browse Courses</span>
+                <a href="<?= BASE_URL ?>/courses" class="nav-link">
+                    📚 <span>Khóa học</span>
                 </a>
-
-                <a href="<?= BASE_URL ?>/my-courses"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    ✅ <span>My Courses</span>
-                </a>
-
-                <a href="<?= BASE_URL ?>/profile"
-                   class="flex items-center gap-1 hover:text-blue-400 transition">
-                    👤 <span>Profile</span>
+                <a href="<?= BASE_URL ?>/my-courses" class="nav-link">
+                    ✅ <span>Khóa học của tôi</span>
                 </a>
             <?php endif; ?>
 
-            <span class="text-gray-500">|</span>
+            <span class="nav-separator">|</span>
 
-            <div class="text-right">
-                <p class="font-semibold"><?= htmlspecialchars($_SESSION['user']['username'] ?? 'User') ?></p>
-                <p class="text-xs text-gray-400"><?= $_SESSION['user']['role'] == 2 ? 'Administrator' : ($_SESSION['user']['role'] == 1 ? 'Teacher' : 'Student') ?></p>
+            <div class="user-menu-wrapper">
+                <div class="user-info-toggle">
+                    <img src="<?= htmlspecialchars($_SESSION['user']['avatar_url'] ?? 'default_avatar.png') ?>" alt="Avatar" class="user-avatar">
+                    <span class="user-name"><?= htmlspecialchars($_SESSION['user']['username'] ?? 'Tôi') ?></span>
+                </div>
+                
+                <div class="user-dropdown-content">
+                    <div class="user-details-summary">
+                         <p class="font-semibold"><?= htmlspecialchars($_SESSION['user']['username'] ?? 'User') ?></p>
+                        <p class="text-xs text-gray-400"><?= $_SESSION['user']['role'] == 2 ? 'Administrator' : ($_SESSION['user']['role'] == 1 ? 'Teacher' : 'Student') ?></p>
+                        <hr class="dropdown-hr">
+                    </div>
+
+                    <a href="<?= BASE_URL ?>/profile/change-avatar" class="dropdown-item">
+                        <span class="dropdown-icon">🖼️</span> Thay đổi ảnh đại diện
+                    </a>
+                    <a href="<?= BASE_URL ?>/profile/info" class="dropdown-item">
+                        <span class="dropdown-icon">⚙️</span> Thông tin cá nhân
+                    </a>
+                    <a href="<?= BASE_URL ?>/logout" class="dropdown-item logout-link">
+                        <span class="dropdown-icon">🚪</span> Đăng xuất
+                    </a>
+                </div>
             </div>
-
-            <a href="<?= BASE_URL ?>/logout"
-               class="flex items-center gap-1 text-red-300 hover:text-red-500 transition">
-                🚪 <span>Logout</span>
-            </a>
+            
         </div>
     </div>
 </nav>

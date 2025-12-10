@@ -8,5 +8,5 @@ if (!isset($title)) $title = 'MyApp';
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title><?= htmlspecialchars($title) ?></title>
 	<script src="https://cdn.tailwindcss.com"></script>
-	<link rel="stylesheet" href="/assets/css/styles.css">
+	<link rel="stylesheet" href="/BTTH02_CNWeb_Nhom3/assets/css/styles.css">
 </head>
