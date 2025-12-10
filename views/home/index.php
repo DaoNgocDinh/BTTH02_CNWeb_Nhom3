@@ -1,52 +1,59 @@
 <?php
-$title = 'Trang chủ';
+$title = "Online Course";
 require_once __DIR__ . '/../layouts/header.php';
+
+/* MOCK DATA */
+$courses = [
+    ['id'=>1,'title'=>'PHP Cơ Bản','level'=>'Beginner','price'=>99,'image'=>'php.jpg'],
+    ['id'=>2,'title'=>'HTML CSS','level'=>'Beginner','price'=>49,'image'=>'html.jpg'],
+    ['id'=>3,'title'=>'UI UX Design','level'=>'Intermediate','price'=>119,'image'=>'uiux.jpg'],
+    ['id'=>4,'title'=>'Digital Marketing','level'=>'Beginner','price'=>79,'image'=>'marketing.jpg']
+];
 ?>
+<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
+<section class="hero">
+    <h1>Học lập trình Online 2TĐ</h1>
+    <p>Khởi đầu sự nghiệp IT ngay hôm nay 🚀</p>
 
-<div class="py-12">
-    <div class="max-w-6xl mx-auto px-4">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Chào mừng đến với MyApp</h1>
-            <p class="text-lg text-gray-600">Nền tảng học tập trực tuyến hàng đầu</p>
-        </div>
+    <input
+        id="search"
+        type="search"
+        placeholder="Bạn muốn học gì hôm nay?"
+        onkeyup="filterCourses(this.value)"
+    />
+</section>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div class="bg-white p-8 rounded-lg shadow-md border-t-4 border-blue-600">
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Khóa học đa dạng</h3>
-                <p class="text-gray-600">Hàng ngàn khóa học từ cơ bản đến nâng cao</p>
-            </div>
-            <div class="bg-white p-8 rounded-lg shadow-md border-t-4 border-green-600">
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Giảng viên uy tín</h3>
-                <p class="text-gray-600">Những chuyên gia hàng đầu trong lĩnh vực</p>
-            </div>
-            <div class="bg-white p-8 rounded-lg shadow-md border-t-4 border-purple-600">
-                <h3 class="text-2xl font-bold text-gray-800 mb-2">Chứng chỉ hoàn thành</h3>
-                <p class="text-gray-600">Nhận chứng chỉ khi hoàn thành khóa học</p>
-            </div>
-        </div>
-
-        <div class="text-center">
-            <h2 class="text-2xl font-bold mb-6 text-gray-900">Sẵn sàng bắt đầu?</h2>
-            <div class="flex gap-4 justify-center">
-                <?php if (isset($_SESSION['user'])): ?>
-                    <a href="<?= BASE_URL ?>/courses" class="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-                        Khám phá khóa học
+<!-- COURSE LIST -->
+<section class="home-courses">
+    <h2>Khoá học nổi bật</h2>
+    <div class="course-grid" id="courseGrid">
+        <?php foreach($courses as $c): ?>
+            <div class="course-card" data-title="<?= strtolower($c['title']) ?>">
+                <img src="/BTTH02_CNWeb_Nhom3/assets/uploads/courses/<?= $c['image'] ?>" alt="" />
+                <h3><?= $c['title'] ?></h3>
+                <small><?= $c['level'] ?></small>
+                <p class="price">$<?= $c['price'] ?></p>
+                <div class="course-actions">
+                    <a href="/BTTH02_CNWeb_Nhom3/views/student/course_detail.php"
+                    class="btn small">
+                    Xem chi tiết
                     </a>
-                    <a href="<?= BASE_URL ?>/dashboard" class="inline-block px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
-                        Học của tôi
-                    </a>
-                <?php else: ?>
-                    <a href="<?= BASE_URL ?>/login" class="inline-block px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-                        Đăng nhập
-                    </a>
-                    <a href="<?= BASE_URL ?>/register" class="inline-block px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
-                        Đăng ký
-                    </a>
-                <?php endif; ?>
+                </div>
             </div>
-        </div>
+        <?php endforeach; ?>
     </div>
-</div>
+</section>
+
+
+<script>
+function filterCourses(keyword){
+    keyword = keyword.toLowerCase();
+
+    document.querySelectorAll('.course-card').forEach(card=>{
+        card.style.display =
+            card.dataset.title.includes(keyword) ? "block" : "none";
+    })
+}
+</script>
 
 <?php require_once __DIR__ . '/../layouts/footer.php'; ?>
-

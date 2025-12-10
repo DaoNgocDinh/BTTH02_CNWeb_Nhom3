@@ -12,14 +12,15 @@ class HomeController
 
         // If user is logged in but not admin, show courses
         if (isset($_SESSION['user'])) {
-            try {
-                $courses = \Course::getAll();
-                require_once __DIR__ . '/../views/courses/index.php';
+            // try {
+            //     $courses = \Course::getAll();
+            //     require_once __DIR__ . '/../views/courses/index.php';
+            //     exit;
+            // } catch (Exception $e) {
+
+            // }
+               require_once __DIR__ . '/../views/home/index.php';
                 exit;
-            } catch (Exception $e) {
-                require_once __DIR__ . '/../views/home/index.php';
-                exit;
-            }
         }
 
         // Not logged in - show welcome page

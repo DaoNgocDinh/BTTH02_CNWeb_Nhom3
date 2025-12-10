@@ -474,3 +474,148 @@ html,body { height: 100%; margin: 0; font-family: system-ui, -apple-system, "Seg
 .logout-link:hover {
      background-color: #fee2e2;
 }
+
+
+/* ===== HOME ===== */
+
+.hero{
+    min-height: 300px;
+    background: linear-gradient(to right, #1a1a1a 0%, #4f4f4f 50%, #1a1a1a 100%);    color: white;
+    text-align:center;
+    padding:4rem 1rem;
+}
+
+.hero h1{
+    font-size:3rem;
+    margin:0;
+}
+
+.hero input{
+    margin-top:1.5rem;
+    padding:.7rem 1rem;
+    width:100%;
+    max-width:420px;
+    border:none;
+    border-radius:12px;
+}
+
+.home-courses{
+    padding:3rem 2rem;
+}
+
+.home-courses h2{
+    margin-bottom:1.5rem;
+    font-weight: 700;
+}
+
+/* Reuse grid code */
+.course-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap:1.5rem;
+}
+
+.course-card{
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #eff6ff 0%, #080e22 100%);
+    padding:1rem;
+    border-radius:16px;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.course-card img{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom: 20px;
+}
+
+.course-card h3{
+    margin:.8rem 0 0;
+    padding-bottom: 10px;
+}
+.course-card p.price{
+    margin-top:auto;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #040a18;
+}
+.course-card small{
+    padding-bottom: 10px;
+}
+.course-card a {
+    text-decoration:none;
+    font-weight:600;
+}
+/* .course-card .btn {
+    display: inline-block; 
+    margin-top: auto; 
+    align-self: flex-end;
+    padding: 0.5rem 1rem;
+    background-color: #4f46e5; 
+    color: white;
+    border-radius: 6px;
+    text-align: center;
+} */
+ .course-actions {
+    /* Đảm bảo có khoảng cách nếu cần */
+    margin-top: 1rem; 
+    
+    /* Căn chỉnh nội dung (nút) sang phải */
+    text-align: right;
+}
+
+
+/* ===== NAVBAR HOME ===== */
+/* .navbar-home{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:1rem 2rem;
+    background: linear-gradient(to right, #4f4f4f 0%, #1a1a1a 50%, #4f4f4f 100%);}
+
+.nav-left-home a{
+    margin-right:1rem;
+    text-decoration:none;
+    font-weight:600;
+    color:#e4e6eb;
+}
+
+.nav-left-home a:hover{
+    color:#2563eb;
+}
+
+.btn-auth{
+    padding:.45rem .9rem;
+    border-radius:8px;
+    text-decoration:none;
+    font-weight:600;
+    margin-left:.4rem;
+    transition:.15s ease;
+}
+
+/* Login */
+/* .btn-auth.login{
+    background: linear-gradient(to right, #1a1a1a 0%, #4f4f4f 50%, #1a1a1a 100%);    color: white;
+    color:white;
+    border: 2px solid #dcdee2;
+}
+
+.btn-auth.login:hover{
+    background:#1d4ed8;
+} */
+
+/* Sign up */
+/* .btn-auth.signup{
+    border:2px solid #dcdee2;
+    color:#d4d6db;
+    background:transparent;
+}
+
+.btn-auth.signup:hover{
+    background:#2563eb;
+    color:white;
+} */
+
