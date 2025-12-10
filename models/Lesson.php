@@ -1,70 +1,45 @@
 <?php
+class Lesson {
+    private $db;
 
-class Lesson
-{
-    private static $table = 'lessons';
-
-    public static function getAll()
-    {
-        $db = \Database::connect();
-        $query = 'SELECT * FROM ' . self::$table . ' ORDER BY `order` ASC';
-        $stmt = $db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function __construct() {
+        $this->db = Database::getInstance();
     }
 
-    public static function findById($id)
-    {
-        $db = \Database::connect();
-        $query = 'SELECT * FROM ' . self::$table . ' WHERE id = ?';
-        $stmt = $db->prepare($query);
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public static function getByCourse($course_id)
-    {
-        $db = \Database::connect();
-        $query = 'SELECT * FROM ' . self::$table . ' WHERE course_id = ? ORDER BY `order` ASC';
-        $stmt = $db->prepare($query);
+    public function getByCourse($course_id) {
+        $stmt = $this->db->prepare("SELECT * FROM lessons WHERE course_id = ? ORDER BY `order` ASC");
         $stmt->execute([$course_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function create($data)
-    {
-        $db = \Database::connect();
-        $query = 'INSERT INTO ' . self::$table . ' (course_id, title, content, video_url, `order`) VALUES (?, ?, ?, ?, ?)';
-        $stmt = $db->prepare($query);
+    public function create($data) {
+        $stmt = $this->db->prepare("INSERT INTO lessons 
+            (course_id, title, content, video_url, `order`, created_at) 
+            VALUES (?, ?, ?, ?, ?, NOW())");
         return $stmt->execute([
-            $data['course_id'] ?? null,
-            $data['title'] ?? null,
-            $data['content'] ?? null,
-            $data['video_url'] ?? null,
-            $data['order'] ?? 0
+            $data['course_id'],
+            $data['title'],
+            $data['content'],
+            $data['video_url'],
+            $data['order'] ?? 1
         ]);
     }
 
-    public static function update($id, $data)
-    {
-        $db = \Database::connect();
-        $query = 'UPDATE ' . self::$table . ' SET course_id = ?, title = ?, content = ?, video_url = ?, `order` = ? WHERE id = ?';
-        $stmt = $db->prepare($query);
+    public function update($id, $data) {
+        $stmt = $this->db->prepare("UPDATE lessons SET title=?, content=?, video_url=?, `order`=? WHERE id=?");
         return $stmt->execute([
-            $data['course_id'] ?? null,
-            $data['title'] ?? null,
-            $data['content'] ?? null,
-            $data['video_url'] ?? null,
-            $data['order'] ?? 0,
-            $id
+            $data['title'], $data['content'], $data['video_url'], $data['order'], $id
         ]);
     }
 
-    public static function delete($id)
-    {
-        $db = \Database::connect();
-        $query = 'DELETE FROM ' . self::$table . ' WHERE id = ?';
-        $stmt = $db->prepare($query);
+    public function delete($id) {
+        $stmt = $this->db->prepare("DELETE FROM lessons WHERE id = ?");
         return $stmt->execute([$id]);
+    }
+
+    public function find($id) {
+        $stmt = $this->db->prepare("SELECT * FROM lessons WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 }

@@ -1,85 +1,80 @@
 <?php
-
-class Course
-{
-    private static $table = 'courses';
-
-    public static function getAll()
-    {
-        $db = \Database::connect();
-        $query = 'SELECT * FROM ' . self::$table . ' ORDER BY created_at DESC';
-        $stmt = $db->prepare($query);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+require_once __DIR__ ."/../config/Database.php";
+class Course {
+    private $db;
+    public function __construct() {
+        $this->db = Database::connect();
+    }
+    public function getAll($instructor_id = null) {
+        if ($instructor_id) {
+            $stmt = $this->db->prepare("SELECT c.*, cat.name as category_name
+                                        FROM courses c
+                                        JOIN categories cat ON c.category_id = cat.id
+                                        WHERE c.instructor_id = ?
+                                        ORDER BY c.created_at");
+            $stmt->execute([$instructor_id]);
+        } else {
+            $stmt = $this->db->prepare("SELECT c.*, u.fullname as instructor_name, cat.name as category_name
+                                        FROM courses c
+                                        JOIN users u ON c.instructor_id = u.id
+                                        JOIN categories cat ON c.category_id = cat.id
+                                        ORDER BY c.created_at");
+            $stmt->execute();
+        }
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function findById($id)
-    {
-        $db = \Database::connect();
-        $query = 'SELECT * FROM ' . self::$table . ' WHERE id = ?';
-        $stmt = $db->prepare($query);
+    public function find($id) {
+        $stmt = $this->db->prepare("SELECT * FROM courses WHERE id = ?");
         $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    public static function getByInstructor($instructor_id)
-    {
-        $db = \Database::connect();
-        $query = 'SELECT * FROM ' . self::$table . ' WHERE instructor_id = ? ORDER BY created_at DESC';
-        $stmt = $db->prepare($query);
-        $stmt->execute([$instructor_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    public function create($data, $image_name) {
+        $stmt = $this->db->prepare("INSERT INTO courses
+            (title, description, instructor_id, category_id, price, duration_weeks, level, image, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
 
-    public static function getByCategory($category_id)
-    {
-        $db = \Database::connect();
-        $query = 'SELECT * FROM ' . self::$table . ' WHERE category_id = ? ORDER BY created_at DESC';
-        $stmt = $db->prepare($query);
-        $stmt->execute([$category_id]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public static function create($data)
-    {
-        $db = \Database::connect();
-        $query = 'INSERT INTO ' . self::$table . ' (title, description, instructor_id, category_id, price, duration_weeks, level, image) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        $stmt = $db->prepare($query);
         return $stmt->execute([
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['instructor_id'] ?? null,
-            $data['category_id'] ?? null,
-            $data['price'] ?? 0,
-            $data['duration_weeks'] ?? null,
-            $data['level'] ?? 'Beginner',
-            $data['image'] ?? null
+            $data['title'],
+            $data['description'],
+            $data['instructor_id'],
+            $data['category_id'],
+            $data['price'],
+            $data['duration_weeks'],
+            $data['level'],
+            $image_name
         ]);
     }
 
-    public static function update($id, $data)
-    {
-        $db = \Database::connect();
-        $query = 'UPDATE ' . self::$table . ' SET title = ?, description = ?, category_id = ?, price = ?, duration_weeks = ?, level = ?, image = ? WHERE id = ?';
-        $stmt = $db->prepare($query);
-        return $stmt->execute([
-            $data['title'] ?? null,
-            $data['description'] ?? null,
-            $data['category_id'] ?? null,
-            $data['price'] ?? 0,
-            $data['duration_weeks'] ?? null,
-            $data['level'] ?? 'Beginner',
-            $data['image'] ?? null,
-            $id
-        ]);
+    public function update($id, $data, $image_name = null) {
+        if ($image_name) {
+            $stmt = $this->db->prepare("UPDATE courses SET
+                title=?, description=?, category_id=?, price=?, duration_weeks=?, level=?, image=?, updated_at=NOW()
+                WHERE id=?");
+            return $stmt->execute([
+                $data['title'], $data['description'], $data['category_id'],
+                $data['price'], $data['duration_weeks'], $data['level'],
+                $image_name, $id
+            ]);
+        } else {
+            $stmt = $this->db->prepare("UPDATE courses SET
+                title=?, description=?, category_id=?, price=?, duration_weeks=?, level=?, updated_at=NOW()
+                WHERE id=?");
+            return $stmt->execute([
+                $data['title'], $data['description'], $data['category_id'],
+                $data['price'], $data['duration_weeks'], $data['level'], $id
+            ]);
+        }
     }
-
-    public static function delete($id)
-    {
-        $db = \Database::connect();
-        $query = 'DELETE FROM ' . self::$table . ' WHERE id = ?';
-        $stmt = $db->prepare($query);
+    public function delete($id) {
+        $stmt = $this->db->prepare("DELETE FROM courses WHERE id = ?");
         return $stmt->execute([$id]);
+    }
+
+    public function getByInstructor($instructor_id) {
+        $stmt = $this->db->prepare("SELECT * FROM courses WHERE instructor_id = ?");
+        $stmt->execute([$instructor_id]);
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }
