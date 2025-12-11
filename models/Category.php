@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../config/Database.php';
 
 class Category
 {
@@ -51,5 +52,16 @@ class Category
         $query = 'DELETE FROM ' . self::$table . ' WHERE id = ?';
         $stmt = $db->prepare($query);
         return $stmt->execute([$id]);
+    }
+
+    public static function getAllCategories() {
+        $pdo = Database::connect();
+
+        try {
+            $sql = "SELECT * FROM categories";
+            return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 }

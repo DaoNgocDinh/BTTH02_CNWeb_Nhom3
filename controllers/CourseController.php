@@ -1,9 +1,14 @@
 <?php
+require_once __DIR__ . '/../config/Database.php';
 require_once 'models/Course.php';
 require_once 'models/Category.php';
 
 class CourseController
 {
+    private $userId;
+    public $courses;
+    public $categories;
+    public $detailCourse;
     private $courseModel;
     private $categoryModel;
 
@@ -15,8 +20,14 @@ class CourseController
             exit;
         }
 
+        $this->userId = $userId;
+        $this->categories = Category::getAllCategories();
+        $this->courses = Course::getCoursesByUserId($this->userId);
+        $this->detailCourse = null;
+
         $this->courseModel = new Course();
         $this->categoryModel = new Category();
+        $this->handlePost();
     }
 
     // Danh sách khóa học của giảng viên
@@ -148,5 +159,23 @@ class CourseController
         }
         header('Location: /instructor/courses');
         exit;
+    }
+    
+    private function handlePost() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['search'])) {
+                $filters = [
+                    'ten_khoa_hoc' => $_POST['ten_khoa_hoc'] ?? '',
+                    'id'           => $_POST['id'] ?? '',
+                    'level'        => $_POST['level'] ?? '',
+                    'category'     => $_POST['category'] ?? ''
+                ];
+                $this->courses = Course::searchCourse($filters);
+            }
+
+            if (isset($_POST['course_id'])) {
+                $this->detailCourse = Course::getInfoCourseByCID($_POST['course_id']);
+            }
+        }
     }
 }

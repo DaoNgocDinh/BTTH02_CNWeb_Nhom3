@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../config/Database.php';
 
 class Enrollment
 {
@@ -71,5 +72,77 @@ class Enrollment
         $query = 'DELETE FROM ' . self::$table . ' WHERE id = ?';
         $stmt = $db->prepare($query);
         return $stmt->execute([$id]);
+    }
+
+    public static function getEnrollmentByUserID($userId) {
+        $pdo = Database::connect();
+
+        try {
+            $sql = "SELECT * FROM enrollments WHERE student_id = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$userId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
+    public static function updateActiveToCompleted($userId, $courseId) {
+        $pdo = Database::connect();
+
+        try {
+            $sql = "UPDATE enrollments 
+                    SET status = 'completed', enrolled_date = NOW(), progress = 100
+                    WHERE student_id = ? AND course_id = ? AND status = 'active'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$userId, $courseId]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public static function dropCourse($userId, $courseId) {
+        $pdo = Database::connect();
+
+        try {
+            $sql = "UPDATE enrollments 
+                    SET status = 'dropped', enrolled_date = NOW() 
+                    WHERE student_id = ? AND course_id = ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$userId, $courseId]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public static function activeCourses($userId, $courseId) {
+        $pdo = Database::connect();
+
+        try {
+            $sql = "INSERT INTO enrollments ( course_id, student_id,  enrolled_date, status, progress) 
+                    VALUES (?, ?, NOW(), 'active', 0)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$courseId, $userId]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public static function updateDropToActive($userId, $courseId) {
+        $pdo = Database::connect();
+
+        try {
+            $sql = "UPDATE enrollments 
+                    SET status = 'active', enrolled_date = NOW() 
+                    WHERE student_id = ? AND course_id = ? AND status = 'dropped'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$userId, $courseId]);
+            return $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            return false;
+        }
     }
 }
