@@ -55,4 +55,40 @@ class EnrollmentController {
             $this->enrollmentStatusMap[$en['course_id']] = $en['status'] ?? 'active';
         }
     }
+
+        public function courseProgress() {
+    if (!isset($_SESSION['user'])) {
+        header('Location: ' . BASE_URL . '/login');
+        exit;
+    }
+
+    $userId = $_SESSION['user']['id'];
+
+    // Lấy tất cả các khóa học người dùng đã đăng ký
+    $enrollments = Enrollment::getEnrollmentByUserID($userId);
+
+    $progressList = [];
+
+    foreach ($enrollments as $enroll) {
+        $courseId = $enroll['course_id'];
+
+        // Lấy thông tin khóa học
+        $course = Course::getInfoCourseByCID($courseId);
+
+        // Tính progress theo thời gian
+        $progress = Enrollment::getProgressByTime($userId, $courseId);
+
+        $progressList[] = [
+            'image' => $course['image'] ?? 'default.jpg',
+            'title' => $course['title'] ?? 'Unknown',
+            'enrolled_date' => $enroll['enrolled_date'] ?? '',
+            'progress' => $progress
+        ];
+    }
+
+    // Truyền dữ liệu sang view
+    $progressData = $progressList;
+    include_once 'views/student/course_progress.php';
+}
+
 }

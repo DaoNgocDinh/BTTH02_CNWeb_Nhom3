@@ -60,6 +60,9 @@ try {
     $router->get('/courses', [CourseController::class, 'browse']);
     $router->get('/courses/{id}', [CourseController::class, 'show']);
     $router->post('/my-courses', [EnrollmentController::class, 'handleEnrollment']);
+
+    $router->get('/course-progress', [EnrollmentController::class, 'courseProgress']);
+    $router->post('/my-courses', [EnrollmentController::class, 'handleEnrollment']);
     
     // ====== ENROLLMENT ======
     $router->post('/enroll', [EnrollmentController::class, 'handleEnrollment']);

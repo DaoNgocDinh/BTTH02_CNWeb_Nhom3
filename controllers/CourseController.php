@@ -230,4 +230,8 @@ class CourseController
     include_once 'views/student/my_courses.php';
 }
 
+    public function courseProgress() {
+        include_once 'views/student/course_progress.php';
+    }
+
 }
