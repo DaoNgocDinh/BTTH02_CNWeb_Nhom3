@@ -21,6 +21,10 @@ class Router
         // Convert other {param} to ([^/]+)
         $regex = preg_replace('/\{[a-zA-Z_]+\}/', '([^/]+)', $regex);
 
+        if($regex[0] !== '/') {
+            $regex = '/' . $regex;
+        }
+        
         $this->routes[] = [
             'method' => $method,
             'pattern' => '#^' . $regex . '$#',
