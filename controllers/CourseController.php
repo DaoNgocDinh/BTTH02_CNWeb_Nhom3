@@ -78,7 +78,7 @@ class CourseController
         exit;
     }
 
-    // Form chỉnh sửa
+    //chỉnh sửa
     public function edit($id)
     {
         $course = $this->courseModel->find($id);

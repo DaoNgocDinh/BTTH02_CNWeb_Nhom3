@@ -71,7 +71,22 @@ try {
     $router->post('/admin/categories', [AdminController::class, 'storeCategory']);
     $router->get('/admin/categories/{id}/edit', [AdminController::class, 'editCategory']);
     $router->post('/admin/categories/{id}', [AdminController::class, 'updateCategory']);
-
+    
+    //Course
+    $router->get('/instructor/courses', [CourseController::class, 'index']);
+    $router->get('/instructor/course/create', [CourseController::class, 'create']);
+    $router->post('/instructor/course/store', [CourseController::class, 'store']);
+    $router->get('/instructor/course/edit/{id}', [CourseController::class, 'edit']);
+    $router->post('/instructor/course/update/{id}', [CourseController::class, 'update']);
+    $router->get('/instructor/course/delete/{id}', [CourseController::class, 'delete']);
+    //Lesson Management
+    $router->get('/instructor/course/{id}/lessons', [LessonController::class, 'index']);
+    $router->get('/instructor/lesson/create/{id}', [CourseController::class, 'create']);
+    $router->post('/instructor/lesson/store/{id}', [CourseController::class, 'store']);
+    $router->get('/instructor/lesson/edit/{id}', [CourseController::class, 'edit']);
+    $router->post('/instructor/lesson/update/{id}', [CourseController::class, 'update']);
+    $router->get('/instructor/lesson/delete/{id}', [CourseController::class, 'delete']);
+    $router->post('/instructor/lesson/upload/{id}', [CourseController::class, 'uploadMaterial']);
     // Dispatch the request
     $router->dispatch($_SERVER['REQUEST_METHOD'], $requestUri);
 
