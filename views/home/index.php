@@ -2,13 +2,9 @@
 $title = "Online Course";
 require_once __DIR__ . '/../layouts/header.php';
 
-/* MOCK DATA */
-$courses = [
-    ['id'=>1,'title'=>'PHP Cơ Bản','level'=>'Beginner','price'=>99,'image'=>'php.jpg'],
-    ['id'=>2,'title'=>'HTML CSS','level'=>'Beginner','price'=>49,'image'=>'html.jpg'],
-    ['id'=>3,'title'=>'UI UX Design','level'=>'Intermediate','price'=>119,'image'=>'uiux.jpg'],
-    ['id'=>4,'title'=>'Digital Marketing','level'=>'Beginner','price'=>79,'image'=>'marketing.jpg']
-];
+// `$courses` and optional `$enrollmentStatusMap` are provided by `HomeController`
+$courses = $courses ?? [];
+$enrollmentStatusMap = $enrollmentStatusMap ?? [];
 ?>
 <?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
 <section class="hero">
@@ -40,6 +36,38 @@ $courses = [
         <?php endforeach; ?>
     </div>
 </section>
+
+<?php if (!empty($courses)): ?>
+    <ul>
+        <?php foreach ($courses as $course): ?>
+            <li>
+                <?= htmlspecialchars($course['image'] ?? '') ?> <strong><?= htmlspecialchars($course['title'] ?? '') ?></strong><br>
+                <?php $st = $enrollmentStatusMap[$course['id']] ?? null; ?>
+                <?php if ($st): ?>
+                    <?php if ($st === 'active'): ?>
+                        <span style="color: green; font-weight: bold;">✓ Đang học</span>
+                    <?php elseif ($st === 'completed'): ?>
+                        <span style="color: blue; font-weight: bold;">★ Hoàn thành</span>
+                    <?php elseif ($st === 'dropper' || $st === 'dropped'): ?>
+                        <span style="color: #a00; font-weight: bold;">✕ Đã hủy</span>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <form method="POST" style="display:inline">
+                        <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['id']) ?>">
+                        <button type="submit" name="action" value="register">Đăng ký học môn</button>
+                    </form>
+                <?php endif; ?>
+
+                <form method="POST">
+                    <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
+                    <button type="submit">Xem chi tiết</button>
+                </form>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <p>Không có khóa học tương ứng.</p>
+<?php endif; ?>
 
 
 <script>

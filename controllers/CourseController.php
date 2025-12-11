@@ -14,18 +14,14 @@ class CourseController
 
     public function __construct()
     {
-        // Phân quyền: chỉ giảng viên trở lên mới vào được
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] < 1) {
-            header('Location: /auth/login');
-            exit;
-        }
-
+        // Initialize models and common properties. Do NOT auto-redirect here;
+        // public methods should work without an authenticated user.
         $this->courseModel = new Course();
         $this->categoryModel = new Category();
 
-        $this->userId = $_SESSION['user']['id'];
+        $this->userId = $_SESSION['user']['id'] ?? null;
         $this->categories = Category::getAllCategories();
-        $this->courses = Course::getCoursesByUserId($this->userId);
+        $this->courses = [];
         $this->detailCourse = null;
 
         $this->handlePost();
@@ -34,9 +30,40 @@ class CourseController
     // Danh sách khóa học của giảng viên
     public function index()
     {
+        // Instructor-only listing
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] < 1) {
+            header('Location: ' . BASE_URL . '/login');
+            exit;
+        }
+
         $instructor_id = $_SESSION['user']['id'];
         $courses = $this->courseModel->getByInstructor($instructor_id);
         require 'views/instructor/my_courses.php';
+    }
+
+    // Public browse listing
+    public function browse()
+    {
+        try {
+            $courses = $this->courseModel->getAll();
+        } catch (Exception $e) {
+            $courses = [];
+        }
+
+        require 'views/courses/index.php';
+    }
+
+    // Public course detail
+    public function show($id)
+    {
+        $course = $this->courseModel->find($id);
+        if (!$course) {
+            http_response_code(404);
+            echo "<h1>Course not found</h1>";
+            return;
+        }
+
+        require 'views/courses/detail.php';
     }
 
     // Form tạo khóa học mới

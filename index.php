@@ -54,7 +54,7 @@ try {
     $router->get('/logout', [AuthController::class, 'logout']);
 
     // ====== COURSES (PUBLIC & STUDENT) ======
-    $router->get('/courses', [CourseController::class, 'index']);
+    $router->get('/courses', [CourseController::class, 'browse']);
     $router->get('/courses/{id}', [CourseController::class, 'show']);
 
     // ====== ADMIN ROUTES ======
