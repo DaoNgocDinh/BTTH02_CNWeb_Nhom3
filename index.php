@@ -81,12 +81,12 @@ try {
     $router->get('/instructor/course/delete/{id}', [CourseController::class, 'delete']);
     //Lesson Management
     $router->get('/instructor/course/{id}/lessons', [LessonController::class, 'index']);
-    $router->get('/instructor/lesson/create/{id}', [CourseController::class, 'create']);
-    $router->post('/instructor/lesson/store/{id}', [CourseController::class, 'store']);
-    $router->get('/instructor/lesson/edit/{id}', [CourseController::class, 'edit']);
-    $router->post('/instructor/lesson/update/{id}', [CourseController::class, 'update']);
-    $router->get('/instructor/lesson/delete/{id}', [CourseController::class, 'delete']);
-    $router->post('/instructor/lesson/upload/{id}', [CourseController::class, 'uploadMaterial']);
+    $router->get('/instructor/lesson/create/{id}', [LessonController::class, 'create']);
+    $router->post('/instructor/lesson/store/{id}', [LessonController::class, 'store']);
+    $router->get('/instructor/lesson/edit/{id}', [LessonController::class, 'edit']);
+    $router->post('/instructor/lesson/update/{id}', [LessonController::class, 'update']);
+    $router->get('/instructor/lesson/delete/{id}', [LessonController::class, 'delete']);
+    $router->post('/instructor/lesson/upload/{id}', [LessonController::class, 'uploadMaterial']);
     // Dispatch the request
     $router->dispatch($_SERVER['REQUEST_METHOD'], $requestUri);
 
