@@ -38,8 +38,22 @@ class CourseController
 
         $instructor_id = $_SESSION['user']['id'];
         $courses = $this->courseModel->getByInstructor($instructor_id);
-        require 'views/instructor/my_courses.php';
+        require 'views/instructor/course.php';
     }
+
+    
+    // Danh sách quản lý khóa học (cho cả admin và instructor)
+    public function manage()
+    {
+        // Kiểm tra quyền truy cập (chỉ admin và instructor)
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] < 1) {
+            header('Location: ' . BASE_URL . '/login');
+            exit;
+        }
+
+        require 'views/instructor/course/manage.php';
+    }
+
 
     // Public browse listing
     public function browse()
@@ -77,11 +91,17 @@ class CourseController
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /instructor/courses');
+            header('Location: ' . BASE_URL . '/instructor/course/manage');
             exit;
         }
 
         $uploadDir = 'assets/uploads/courses/';
+        
+        // Tạo thư mục nếu không tồn tại
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        
         $imageName = 'default.jpg'; // ảnh mặc định
 
         if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
@@ -91,7 +111,7 @@ class CourseController
 
             if (!move_uploaded_file($_FILES['image']['tmp_name'], $uploadFile)) {
                 $_SESSION['error'] = "Upload ảnh thất bại!";
-                header('Location: /instructor/course/create');
+                header('Location: ' . BASE_URL . '/instructor/course/create');
                 exit;
             }
         }
@@ -109,10 +129,10 @@ class CourseController
 
         if ($this->courseModel->create($data, $imageName)) {
             $_SESSION['success'] = "Tạo khóa học thành công!";
-            header('Location: /instructor/courses');
+            header('Location: ' . BASE_URL . '/instructor/course/manage');
         } else {
             $_SESSION['error'] = "Có lỗi xảy ra!";
-            header('Location: /instructor/course/create');
+            header('Location: ' . BASE_URL . '/instructor/course/create');
         }
         exit;
     }
@@ -122,10 +142,13 @@ class CourseController
     {
         $course = $this->courseModel->find($id);
 
-        // Kiểm tra quyền sở hữu
-        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
+        // Kiểm tra quyền sở hữu (instructor) hoặc admin
+        $isAdmin = $_SESSION['user']['role'] == 2;
+        $isOwner = $course && $course->instructor_id == $_SESSION['user']['id'];
+        
+        if (!$course || (!$isAdmin && !$isOwner)) {
             $_SESSION['error'] = "Không có quyền truy cập!";
-            header('Location: /instructor/courses');
+            header('Location: ' . BASE_URL . '/instructor/course/manage');
             exit;
         }
 
@@ -137,8 +160,20 @@ class CourseController
     public function update($id)
     {
         $course = $this->courseModel->find($id);
-        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
+        
+        // Kiểm tra quyền sở hữu (instructor) hoặc admin
+        $isAdmin = $_SESSION['user']['role'] == 2;
+        $isOwner = $course && $course->instructor_id == $_SESSION['user']['id'];
+        
+        if (!$course || (!$isAdmin && !$isOwner)) {
             die("Không có quyền!");
+        }
+
+        $uploadDir = 'assets/uploads/courses/';
+        
+        // Tạo thư mục nếu không tồn tại
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
         }
 
         $imageName = $course->image;
@@ -169,7 +204,7 @@ class CourseController
         } else {
             $_SESSION['error'] = "Cập nhật thất bại!";
         }
-        header("Location: /instructor/course/edit/$id");
+        header("Location: " . BASE_URL . "/instructor/course/manage");
         exit;
     }
 
@@ -177,7 +212,12 @@ class CourseController
     public function delete($id)
     {
         $course = $this->courseModel->find($id);
-        if ($course && $course->instructor_id == $_SESSION['user']['id']) {
+        
+        // Kiểm tra quyền sở hữu (instructor) hoặc admin
+        $isAdmin = $_SESSION['user']['role'] == 2;
+        $isOwner = $course && $course->instructor_id == $_SESSION['user']['id'];
+        
+        if ($course && ($isAdmin || $isOwner)) {
             // Xóa ảnh nếu không phải mặc định
             if ($course->image !== 'default.jpg' && file_exists("assets/uploads/courses/{$course->image}")) {
                 unlink("assets/uploads/courses/{$course->image}");
@@ -185,7 +225,7 @@ class CourseController
             $this->courseModel->delete($id);
             $_SESSION['success'] = "Xóa khóa học thành công!";
         }
-        header('Location: /instructor/courses');
+        header('Location: ' . BASE_URL . '/instructor/course/manage');
         exit;
     }
     private function handlePost() {

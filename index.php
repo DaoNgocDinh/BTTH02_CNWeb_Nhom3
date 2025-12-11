@@ -78,6 +78,7 @@ try {
     $router->post('/admin/categories/{id}', [AdminController::class, 'updateCategory']);
     
     //Course
+    $router->get('/instructor/course/manage', [CourseController::class, 'manage']);
     $router->get('/instructor/courses', [CourseController::class, 'index']);
     $router->get('/instructor/course/create', [CourseController::class, 'create']);
     $router->post('/instructor/course/store', [CourseController::class, 'store']);
