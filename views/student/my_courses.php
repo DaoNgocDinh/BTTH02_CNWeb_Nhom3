@@ -78,7 +78,6 @@ require_once __DIR__ . '/../layouts/sidebar.php';
     border-radius: 4px;
     cursor: pointer;
 }
-
 .course-card button[value="drop"] {
     background-color: #dc3545;
     color: white;
