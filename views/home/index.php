@@ -55,12 +55,11 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
                     
                     <?php else: ?>
                         <!-- Nút đăng ký -->
-                        <form method="POST" style="display:inline">
+                        <form method="POST" action="<?= BASE_URL ?>/enroll">
                             <input type="hidden" name="course_id" value="<?= $c['id'] ?>">
-                            <button type="submit" name="action" value="register" class="btn small">
-                                Đăng ký học môn
-                            </button>
+                            <button type="submit" name="action" value="register" class="btn small">Đăng ký học môn</button>
                         </form>
+
                     <?php endif; ?>
 
                     <!-- Nút xem chi tiết -->
