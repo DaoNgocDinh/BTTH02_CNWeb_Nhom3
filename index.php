@@ -52,6 +52,19 @@ try {
     $router->get('/courses', [CourseController::class, 'index']);
     $router->get('/courses/{id}', [CourseController::class, 'show']);
 
+    // ====== STUDENT ROUTES ======
+    $router->get('/student/dashboard', [StudentController::class, 'dashboard']);
+    $router->get('/student/my-courses', [StudentController::class, 'myCourses']);
+    $router->get('/student/progress', [StudentController::class, 'progress']);
+    $router->get('/student/enroll/{id}', [StudentController::class, 'enroll']);
+
+    // ====== TEACHER ROUTES ======
+    $router->get('/teacher/dashboard', [TeacherController::class, 'dashboard']);
+    $router->get('/teacher/courses', [TeacherController::class, 'myCourses']);
+    $router->get('/teacher/courses/create', [TeacherController::class, 'createCourse']);
+    $router->post('/teacher/courses', [TeacherController::class, 'storeCourse']);
+    $router->get('/teacher/students', [TeacherController::class, 'students']);
+
     // ====== ADMIN ROUTES ======
     // Dashboard
     $router->get('/admin/dashboard', [AdminController::class, 'dashboard']);
