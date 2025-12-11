@@ -25,50 +25,54 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
     <div class="course-grid" id="courseGrid">
         <?php foreach($courses as $c): ?>
             <div class="course-card" data-title="<?= strtolower($c['title']) ?>">
+                
+                <!-- Ảnh khóa học -->
                 <img src="<?= BASE_URL ?>/assets/uploads/courses/<?= $c['image'] ?>" alt="">
-                <h3><?= $c['title'] ?></h3>
-                <small><?= $c['level'] ?></small>
-                <p class="price">$<?= $c['price'] ?></p>
+                
+                <h3><?= htmlspecialchars($c['title']) ?></h3>
+                <small><?= htmlspecialchars($c['level']) ?></small>
+                <p class="price">$<?= htmlspecialchars($c['price']) ?></p>
+
                 <div class="course-actions">
-                    <a href="<?= BASE_URL ?>/courses/<?= $c['id'] ?>" class="btn small">Xem chi tiết</a>
+
+                    <?php 
+                        $st = $enrollmentStatusMap[$c['id']] ?? null;
+                    ?>
+
+                    <!-- Trạng thái học -->
+                    <?php if ($st): ?>
+                        
+                        <?php if ($st === 'active'): ?>
+                            <span style="color: green; font-weight: bold;">✓ Đang học</span>
+
+                        <?php elseif ($st === 'completed'): ?>
+                            <span style="color: blue; font-weight: bold;">★ Hoàn thành</span>
+
+                        <?php elseif ($st === 'dropper' || $st === 'dropped'): ?>
+                            <span style="color: #a00; font-weight: bold;">✕ Đã hủy</span>
+
+                        <?php endif; ?>
+                    
+                    <?php else: ?>
+                        <!-- Nút đăng ký -->
+                        <form method="POST" style="display:inline">
+                            <input type="hidden" name="course_id" value="<?= $c['id'] ?>">
+                            <button type="submit" name="action" value="register" class="btn small">
+                                Đăng ký học môn
+                            </button>
+                        </form>
+                    <?php endif; ?>
+
+                    <!-- Nút xem chi tiết -->
+                    <a href="<?= BASE_URL ?>/courses/<?= $c['id'] ?>" class="btn small">
+                        Xem chi tiết
+                    </a>
+
                 </div>
             </div>
         <?php endforeach; ?>
     </div>
 </section>
-
-<?php if (!empty($courses)): ?>
-    <ul>
-        <?php foreach ($courses as $course): ?>
-            <li>
-                <?= htmlspecialchars($course['image'] ?? '') ?> <strong><?= htmlspecialchars($course['title'] ?? '') ?></strong><br>
-                <?php $st = $enrollmentStatusMap[$course['id']] ?? null; ?>
-                <?php if ($st): ?>
-                    <?php if ($st === 'active'): ?>
-                        <span style="color: green; font-weight: bold;">✓ Đang học</span>
-                    <?php elseif ($st === 'completed'): ?>
-                        <span style="color: blue; font-weight: bold;">★ Hoàn thành</span>
-                    <?php elseif ($st === 'dropper' || $st === 'dropped'): ?>
-                        <span style="color: #a00; font-weight: bold;">✕ Đã hủy</span>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <form method="POST" style="display:inline">
-                        <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['id']) ?>">
-                        <button type="submit" name="action" value="register">Đăng ký học môn</button>
-                    </form>
-                <?php endif; ?>
-
-                <form method="POST">
-                    <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
-                    <button type="submit">Xem chi tiết</button>
-                </form>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php else: ?>
-    <p>Không có khóa học tương ứng.</p>
-<?php endif; ?>
-
 
 <script>
 function filterCourses(keyword){
