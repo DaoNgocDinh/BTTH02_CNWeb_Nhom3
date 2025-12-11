@@ -146,15 +146,15 @@
                 </a>
 
                 <a href="<?= BASE_URL ?>/dashboard" class="nav-link">
-                    📊 <span>Dashboard</span>
+                    📊 <span>Tùy chọn</span>
                 </a>
 
                 <a href="<?= BASE_URL ?>/my-courses" class="nav-link">
-                    ✅ <span>My Courses</span>
+                    ✅ <span>Khóa học của tôi</span>
                 </a>
 
                 <a href="<?= BASE_URL ?>/course-progress" class="nav-link">
-                    📈 <span>Course Progress</span>
+                    📈 <span>Tiến độ khóa học</span>
                 </a>
 
                 <div class="user-menu-wrapper">
