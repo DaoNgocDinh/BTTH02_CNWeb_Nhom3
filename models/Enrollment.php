@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__ . '/../config/Database.php';
 
 class Enrollment
@@ -73,7 +74,6 @@ class Enrollment
         $stmt = $db->prepare($query);
         return $stmt->execute([$id]);
     }
-
     public static function getEnrollmentByUserID($userId) {
         $pdo = Database::connect();
 

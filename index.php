@@ -6,7 +6,12 @@ session_start();
 
 // Define base path
 define('BASE_PATH', __DIR__);
-define('BASE_URL', '/BTTH02_CNWeb_Nhom3');
+define('BASE_URL', '/' . basename(__DIR__));
+
+// Enable verbose errors for debugging (disable in production)
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require_once __DIR__ . "/vendor/autoload.php";  // Composer autoload
 require_once __DIR__ . "/routers/routers.php";
@@ -71,7 +76,22 @@ try {
     $router->post('/admin/categories', [AdminController::class, 'storeCategory']);
     $router->get('/admin/categories/{id}/edit', [AdminController::class, 'editCategory']);
     $router->post('/admin/categories/{id}', [AdminController::class, 'updateCategory']);
-
+    
+    //Course
+    $router->get('/instructor/courses', [CourseController::class, 'index']);
+    $router->get('/instructor/course/create', [CourseController::class, 'create']);
+    $router->post('/instructor/course/store', [CourseController::class, 'store']);
+    $router->get('/instructor/course/edit/{id}', [CourseController::class, 'edit']);
+    $router->post('/instructor/course/update/{id}', [CourseController::class, 'update']);
+    $router->get('/instructor/course/delete/{id}', [CourseController::class, 'delete']);
+    //Lesson Management
+    $router->get('/instructor/course/{id}/lessons', [LessonController::class, 'index']);
+    $router->get('/instructor/lesson/create/{id}', [CourseController::class, 'create']);
+    $router->post('/instructor/lesson/store/{id}', [CourseController::class, 'store']);
+    $router->get('/instructor/lesson/edit/{id}', [CourseController::class, 'edit']);
+    $router->post('/instructor/lesson/update/{id}', [CourseController::class, 'update']);
+    $router->get('/instructor/lesson/delete/{id}', [CourseController::class, 'delete']);
+    $router->post('/instructor/lesson/upload/{id}', [CourseController::class, 'uploadMaterial']);
     // Dispatch the request
     $router->dispatch($_SERVER['REQUEST_METHOD'], $requestUri);
 
@@ -81,7 +101,7 @@ try {
     echo "<div style=\"text-align: center; padding: 50px;\">";
     echo "<h1>500 Internal Server Error</h1>";
     echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
-    echo "<a href=\"/BTTH02_CNWeb_Nhom3/\">Go to Homepage</a>";
+    echo '<a href="/' . basename(__DIR__) . '/">Go to Homepage</a>';
     echo "</div></body></html>";
 }
 

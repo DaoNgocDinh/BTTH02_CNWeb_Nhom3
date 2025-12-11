@@ -29,15 +29,12 @@ $courses = [
     <div class="course-grid" id="courseGrid">
         <?php foreach($courses as $c): ?>
             <div class="course-card" data-title="<?= strtolower($c['title']) ?>">
-                <img src="/BTTH02_CNWeb_Nhom3/assets/uploads/courses/<?= $c['image'] ?>" alt="" />
+                <img src="<?= BASE_URL ?>/assets/uploads/courses/<?= $c['image'] ?>" alt="">
                 <h3><?= $c['title'] ?></h3>
                 <small><?= $c['level'] ?></small>
                 <p class="price">$<?= $c['price'] ?></p>
                 <div class="course-actions">
-                    <a href="/BTTH02_CNWeb_Nhom3/views/student/course_detail.php"
-                    class="btn small">
-                    Xem chi tiết
-                    </a>
+                    <a href="<?= BASE_URL ?>/courses/<?= $c['id'] ?>" class="btn small">Xem chi tiết</a>
                 </div>
             </div>
         <?php endforeach; ?>

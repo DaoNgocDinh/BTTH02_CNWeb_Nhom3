@@ -1,39 +1,40 @@
 <?php
-require_once __DIR__ . '/../config/Database.php';
 require_once 'models/Course.php';
 require_once 'models/Category.php';
+require_once 'config/Database.php';
 
 class CourseController
 {
+    private $courseModel;
+    private $categoryModel;
     private $userId;
     public $courses;
     public $categories;
     public $detailCourse;
-    private $courseModel;
-    private $categoryModel;
 
     public function __construct()
     {
         // Phân quyền: chỉ giảng viên trở lên mới vào được
-        if (!isset($_SESSION['user']) || $_SESSION['user']->role < 1) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] < 1) {
             header('Location: /auth/login');
             exit;
         }
 
-        $this->userId = $userId;
+        $this->courseModel = new Course();
+        $this->categoryModel = new Category();
+
+        $this->userId = $_SESSION['user']['id'];
         $this->categories = Category::getAllCategories();
         $this->courses = Course::getCoursesByUserId($this->userId);
         $this->detailCourse = null;
 
-        $this->courseModel = new Course();
-        $this->categoryModel = new Category();
         $this->handlePost();
     }
 
     // Danh sách khóa học của giảng viên
     public function index()
     {
-        $instructor_id = $_SESSION['user']->id;
+        $instructor_id = $_SESSION['user']['id'];
         $courses = $this->courseModel->getByInstructor($instructor_id);
         require 'views/instructor/my_courses.php';
     }
@@ -71,7 +72,7 @@ class CourseController
         $data = [
             'title'          => trim($_POST['title']),
             'description'    => $_POST['description'],
-            'instructor_id'  => $_SESSION['user']->id,
+            'instructor_id'  => $_SESSION['user']['id'],
             'category_id'   => $_POST['category_id'],
             'price'          => $_POST['price'],
             'duration_weeks' => $_POST['duration_weeks'],
@@ -89,13 +90,13 @@ class CourseController
         exit;
     }
 
-    // Form chỉnh sửa
+    //chỉnh sửa
     public function edit($id)
     {
         $course = $this->courseModel->find($id);
 
         // Kiểm tra quyền sở hữu
-        if (!$course || $course->instructor_id != $_SESSION['user']->id) {
+        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
             $_SESSION['error'] = "Không có quyền truy cập!";
             header('Location: /instructor/courses');
             exit;
@@ -109,7 +110,7 @@ class CourseController
     public function update($id)
     {
         $course = $this->courseModel->find($id);
-        if (!$course || $course->instructor_id != $_SESSION['user']->id) {
+        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
             die("Không có quyền!");
         }
 
@@ -149,7 +150,7 @@ class CourseController
     public function delete($id)
     {
         $course = $this->courseModel->find($id);
-        if ($course && $course->instructor_id == $_SESSION['user']->id) {
+        if ($course && $course->instructor_id == $_SESSION['user']['id']) {
             // Xóa ảnh nếu không phải mặc định
             if ($course->image !== 'default.jpg' && file_exists("assets/uploads/courses/{$course->image}")) {
                 unlink("assets/uploads/courses/{$course->image}");
@@ -160,7 +161,6 @@ class CourseController
         header('Location: /instructor/courses');
         exit;
     }
-    
     private function handlePost() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['search'])) {

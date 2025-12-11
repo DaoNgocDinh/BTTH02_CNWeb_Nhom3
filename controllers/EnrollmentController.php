@@ -8,8 +8,13 @@ class EnrollmentController {
     public $enrollmentStatusMap;
     public $showEnrollmentList = false;
 
-    public function __construct($userId) {
-        $this->userId = $userId;
+    public function __construct() {
+        if (!isset($_SESSION['user'])) {
+            header('Location: /auth/login');
+            exit;
+        }
+
+        $this->userId = $_SESSION['user']['id'];
         $this->loadEnrollment();
         $this->handlePost();
     }
@@ -53,6 +58,3 @@ class EnrollmentController {
         }
     }
 }
-
-$userId = 2;
-$enrollmentController = new EnrollmentController($userId);

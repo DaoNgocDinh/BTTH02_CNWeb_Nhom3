@@ -37,11 +37,11 @@ class AuthController {
             $_SESSION['flash'] = ['type' => 'success', 'message' => 'Đăng ký thành công. Đăng nhập để tiếp tục.'];
             // clear old input
             unset($_SESSION['old']);
-            header("Location: /BTTH02_CNWeb_Nhom3/login");
+            header('Location: ' . BASE_URL . '/login');
             exit;
         } else {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Đăng ký thất bại. Vui lòng thử lại.'];
-            header("Location: /BTTH02_CNWeb_Nhom3/register");
+            header('Location: ' . BASE_URL . '/register');
             exit;
         }
     }
@@ -58,7 +58,7 @@ class AuthController {
 
         if (!$user || !password_verify($password, $user['password'])) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'Sai tài khoản hoặc mật khẩu'];
-            header('Location: /BTTH02_CNWeb_Nhom3/login');
+            header('Location: ' . BASE_URL . '/login');
             exit;
         }
 
@@ -90,9 +90,9 @@ class AuthController {
 
         // Đăng nhập xong chuyển hướng đến dashboard admin hoặc home
         if ($user['role'] == 2) {
-            header("Location: /BTTH02_CNWeb_Nhom3/admin/dashboard");
+            header('Location: ' . BASE_URL . '/admin/dashboard');
         } else {
-            header("Location: /BTTH02_CNWeb_Nhom3/");
+            header('Location: ' . BASE_URL . '/');
         }
         exit;
     }
@@ -101,7 +101,7 @@ class AuthController {
     public function logout() {
         setcookie("token", "", time() - 3600, "/");
         session_destroy();
-        header("Location: /BTTH02_CNWeb_Nhom3/login");
+        header('Location: ' . BASE_URL . '/login');
         exit;
     }
 }

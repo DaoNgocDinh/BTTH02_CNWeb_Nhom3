@@ -5,6 +5,9 @@
 
 if (!function_exists('base_url')) {
     function base_url($path = '') {
-        return '/BTTH02_CNWeb_Nhom3' . $path;
+        if (defined('BASE_URL')) {
+            return BASE_URL . $path;
+        }
+        return '/' . ltrim($path, '/');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ ."/../config/Database.php";
 
+
 class Course {
     private $db;
     public function __construct() {
@@ -178,6 +179,8 @@ class Course {
                 $stmt->execute($params);
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
+
+            // Otherwise assume a single course id was provided
             $sql = "SELECT * FROM courses WHERE id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$criteria]);
@@ -186,5 +189,4 @@ class Course {
             return is_array($criteria) ? [] : null;
         }
     }
-
 }

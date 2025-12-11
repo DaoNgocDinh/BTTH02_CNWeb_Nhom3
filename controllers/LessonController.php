@@ -11,7 +11,7 @@ class LessonController
 
     public function __construct()
     {
-        if (!isset($_SESSION['user']) || $_SESSION['user']->role < 1) {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] < 1) {
             header('Location: /auth/login');
             exit;
         }
@@ -25,7 +25,7 @@ class LessonController
     public function index($course_id)
     {
         $course = $this->courseModel->find($course_id);
-        if (!$course || $course->instructor_id != $_SESSION['user']->id) {
+        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
             $_SESSION['error'] = "Không có quyền!";
             header('Location: /instructor/courses');
             exit;
@@ -39,7 +39,7 @@ class LessonController
     public function create($course_id)
     {
         $course = $this->courseModel->find($course_id);
-        if (!$course || $course->instructor_id != $_SESSION['user']->id) {
+        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
             die("Không có quyền!");
         }
         require 'views/instructor/lessons/create.php';
@@ -69,7 +69,7 @@ class LessonController
         $lesson = $this->lessonModel->find($lesson_id);
         $course = $this->courseModel->find($lesson->course_id);
 
-        if (!$course || $course->instructor_id != $_SESSION['user']->id) {
+        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
             die("Không có quyền!");
         }
 
@@ -81,7 +81,7 @@ class LessonController
     {
         $lesson = $this->lessonModel->find($lesson_id);
         $course = $this->courseModel->find($lesson->course_id);
-        if (!$course || $course->instructor_id != $_SESSION['user']->id) {
+        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
             die("Không có quyền!");
         }
 
@@ -104,7 +104,7 @@ class LessonController
         $lesson = $this->lessonModel->find($lesson_id);
         if ($lesson) {
             $course = $this->courseModel->find($lesson->course_id);
-            if ($course->instructor_id == $_SESSION['user']->id) {
+                if ($course->instructor_id == $_SESSION['user']['id']) {
                 $this->lessonModel->delete($lesson_id);
                 $_SESSION['success'] = "Xóa bài học thành công!";
             }
@@ -120,7 +120,7 @@ class LessonController
         if (!$lesson) die("Bài học không tồn tại!");
 
         $course = $this->courseModel->find($lesson->course_id);
-        if ($course->instructor_id != $_SESSION['user']->id) die("Không có quyền!");
+        if ($course->instructor_id != $_SESSION['user']['id']) die("Không có quyền!");
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['files']) && count($_FILES['files']['error']) > 0) {
             $uploadDir = 'assets/uploads/materials/';

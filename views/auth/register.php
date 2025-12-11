@@ -24,7 +24,7 @@ $old = $_SESSION['old'] ?? [];
             }
             ?>
 
-            <form method="POST" action="/BTTH02_CNWeb_Nhom3/register" class="form" novalidate>
+            <form method="POST" action="<?= BASE_URL ?>/register" class="form" novalidate>
 
                 <div class="form-group">
                     <label class="form-label">Username</label>
@@ -69,7 +69,7 @@ $old = $_SESSION['old'] ?? [];
 
             <p class="text-muted">
                 Đã có tài khoản?
-                <a href="/BTTH02_CNWeb_Nhom3/login" class="link">Đăng nhập</a>
+                <a href="<?= BASE_URL ?>/login" class="link">Đăng nhập</a>
             </p>
         </div>
     </div>

@@ -1,9 +1,10 @@
 <?php
+require_once __DIR__ ."/../config/Database.php";
 class Material {
     private $db;
 
     public function __construct() {
-        $this->db = Database::getInstance();
+        $this->db = Database::connect();
     }
 
     public function getByLesson($lesson_id) {
