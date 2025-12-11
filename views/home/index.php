@@ -45,6 +45,7 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
                     ?>
                     <form method="POST" action="<?= BASE_URL ?>/enroll">
                             <input type="hidden" name="course_id" value="<?= $c['id'] ?>">
+                            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
                             <button type="submit" name="action" value="register" class="btn small">Đăng ký học môn</button>
                         </form>
                     <!-- Nút xem chi tiết -->

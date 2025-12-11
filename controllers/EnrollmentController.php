@@ -43,8 +43,8 @@ class EnrollmentController {
             }
         }
 
-        // Redirect back to home
-        header('Location: ' . BASE_URL . '/');
+        $redirect = $_POST['redirect'] ?? BASE_URL . '/my-courses';
+        header('Location: ' . $redirect);
         exit;
     }
 

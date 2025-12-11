@@ -137,7 +137,7 @@ class Enrollment
         try {
             $sql = "UPDATE enrollments 
                     SET status = 'active', enrolled_date = NOW() 
-                    WHERE student_id = ? AND course_id = ? AND status = 'dropped'";
+                    WHERE student_id = ? AND course_id = ?";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$userId, $courseId]);
             return $stmt->rowCount() > 0;
@@ -145,4 +145,16 @@ class Enrollment
             return false;
         }
     }
+
+    public static function getStatus($userId, $courseId) {
+    $pdo = Database::connect();
+    $sql = "SELECT status 
+            FROM enrollments 
+            WHERE student_id = ? AND course_id = ?
+            LIMIT 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$userId, $courseId]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result['status'] ?? null; // null nếu chưa đăng ký
+}
 }
