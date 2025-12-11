@@ -21,6 +21,8 @@ require_once __DIR__ . "/controllers/AuthController.php";
 require_once __DIR__ . "/controllers/AdminController.php";
 require_once __DIR__ . "/controllers/HomeController.php";
 require_once __DIR__ . "/controllers/CourseController.php";
+require_once __DIR__ . "/controllers/LessonController.php";
+require_once __DIR__ . "/controllers/EnrollmentController.php";
 require_once __DIR__ . "/middleware/Auth_JWT.php";
 
 use Firebase\JWT\JWT;
@@ -54,8 +56,16 @@ try {
     $router->get('/logout', [AuthController::class, 'logout']);
 
     // ====== COURSES (PUBLIC & STUDENT) ======
+    $router->get('/my-courses', [CourseController::class, 'myCourses']);
     $router->get('/courses', [CourseController::class, 'browse']);
     $router->get('/courses/{id}', [CourseController::class, 'show']);
+    $router->post('/my-courses', [EnrollmentController::class, 'handleEnrollment']);
+
+    $router->get('/course-progress', [EnrollmentController::class, 'courseProgress']);
+    $router->post('/my-courses', [EnrollmentController::class, 'handleEnrollment']);
+    
+    // ====== ENROLLMENT ======
+    $router->post('/enroll', [EnrollmentController::class, 'handleEnrollment']);
 
     // ====== ADMIN ROUTES ======
     // Dashboard

@@ -23,7 +23,12 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
 <section class="home-courses">
     <h2>Khoá học nổi bật</h2>
     <div class="course-grid" id="courseGrid">
-        <?php foreach($courses as $c): ?>
+        <?php foreach($courses as $c): 
+            $st = $enrollmentStatusMap[$c['id']] ?? null;
+
+                if ($st) {
+                continue; // bỏ qua khóa đã đăng ký
+            }?>
             <div class="course-card" data-title="<?= strtolower($c['title']) ?>">
                 
                 <!-- Ảnh khóa học -->
@@ -38,31 +43,11 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
                     <?php 
                         $st = $enrollmentStatusMap[$c['id']] ?? null;
                     ?>
-
-                    <!-- Trạng thái học -->
-                    <?php if ($st): ?>
-                        
-                        <?php if ($st === 'active'): ?>
-                            <span style="color: green; font-weight: bold;">✓ Đang học</span>
-
-                        <?php elseif ($st === 'completed'): ?>
-                            <span style="color: blue; font-weight: bold;">★ Hoàn thành</span>
-
-                        <?php elseif ($st === 'dropper' || $st === 'dropped'): ?>
-                            <span style="color: #a00; font-weight: bold;">✕ Đã hủy</span>
-
-                        <?php endif; ?>
-                    
-                    <?php else: ?>
-                        <!-- Nút đăng ký -->
-                        <form method="POST" style="display:inline">
+                    <form method="POST" action="<?= BASE_URL ?>/enroll">
                             <input type="hidden" name="course_id" value="<?= $c['id'] ?>">
-                            <button type="submit" name="action" value="register" class="btn small">
-                                Đăng ký học môn
-                            </button>
+                            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
+                            <button type="submit" name="action" value="register" class="btn small">Đăng ký học môn</button>
                         </form>
-                    <?php endif; ?>
-
                     <!-- Nút xem chi tiết -->
                     <a href="<?= BASE_URL ?>/courses/<?= $c['id'] ?>" class="btn small">
                         Xem chi tiết

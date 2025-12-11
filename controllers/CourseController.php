@@ -245,4 +245,33 @@ class CourseController
             }
         }
     }
+
+    public function myCourses() {
+    $userId = $_SESSION['user']['id'] ?? null;
+    if (!$userId) {
+        header("Location: " . BASE_URL . "/login");
+        exit;
+    }
+
+    $courses = Course::getCoursesByUserId($userId);
+
+    $fullCourses = [];
+    $enrollment = new Enrollment(); // tạo object Enrollment
+
+    foreach ($courses as $c) {
+        $courseInfo = Course::getInfoCourseByCID($c['id']);
+        if ($courseInfo) {
+            // Lấy status riêng cho user này
+            $courseInfo['status'] = $enrollment->getStatus($userId, $c['id']);
+            $fullCourses[] = $courseInfo;
+        }
+    }
+
+    include_once 'views/student/my_courses.php';
+}
+
+    public function courseProgress() {
+        include_once 'views/student/course_progress.php';
+    }
+
 }
