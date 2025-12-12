@@ -30,10 +30,10 @@ class LessonController
             header('Location: /instructor/courses');
             exit;
         }
-        $course = $this->courseModel->find($course_id);
         $lessons = $this->lessonModel->getByCourse($course_id);
         require 'views/instructor/lessons/manage.php';
     }
+    
 
     // Form thêm bài học
     public function create($course_id)

@@ -25,7 +25,7 @@ $courses = $allCourses;
         <h1 class="text-3xl font-bold text-gray-900">Manage Courses</h1>
         <?php if ($isAdmin): ?>
             <a href="<?= BASE_URL ?>/instructor/course/create"
-               class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all">
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all">
                 + Create Course
             </a>
         <?php endif; ?>
@@ -69,23 +69,29 @@ $courses = $allCourses;
                                 <td class="px-6 py-4 text-gray-900">₫<?= number_format($course->price, 0, '.', ',') ?></td>
                                 <td class="px-6 py-4">
                                     <?php
-                                        $levels = [
-                                            'Beginner' => ['bg-green-100 text-green-700', '🟢 Cơ Bản'],
-                                            'Intermediate' => ['bg-yellow-100 text-yellow-700', '🟡 Trung Cấp'],
-                                            'Advanced' => ['bg-red-100 text-red-700', '🔴 Nâng Cao'],
-                                        ];
-                                        $l = $levels[$course->level] ?? ['bg-gray-100 text-gray-700', 'Unknown'];
+                                    $levels = [
+                                        'Beginner' => ['bg-green-100 text-green-700', '🟢 Cơ Bản'],
+                                        'Intermediate' => ['bg-yellow-100 text-yellow-700', '🟡 Trung Cấp'],
+                                        'Advanced' => ['bg-red-100 text-red-700', '🔴 Nâng Cao'],
+                                    ];
+                                    $l = $levels[$course->level] ?? ['bg-gray-100 text-gray-700', 'Unknown'];
                                     ?>
                                     <span class="px-3 py-1 rounded-full text-xs font-medium <?= $l[0] ?>"><?= $l[1] ?></span>
                                 </td>
                                 <td class="px-6 py-4 text-gray-600"><?= $course->duration_weeks ?> tuần</td>
                                 <td class="px-6 py-4 flex gap-2">
-                                    <a href="<?= BASE_URL ?>/instructor/course/edit/<?= $course->id ?>"
-                                       class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
-                                    <a href="<?= BASE_URL ?>/instructor/course/delete/<?= $course->id ?>"
-                                       onclick="return confirm('Bạn chắc chắn muốn xóa khóa học này?');"
-                                       class="text-red-600 hover:text-red-800 font-medium">Delete</a>
+                                    <?php if ($isAdmin): ?>
+                                        <a href="<?= BASE_URL ?>/instructor/course/edit/<?= $course->id ?>"
+                                            class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
+                                        <a href="<?= BASE_URL ?>/instructor/course/delete/<?= $course->id ?>"
+                                            onclick="return confirm('Bạn chắc chắn muốn xóa khóa học này?');"
+                                            class="text-red-600 hover:text-red-800 font-medium">Delete</a>
+                                    <?php elseif ($isInstructor): ?>
+                                        <a href="<?= BASE_URL ?>/instructor/course/<?= $course->id ?>/lessons"
+                                            class="text-green-600 hover:text-green-800 font-medium">Quản lý nội dung</a>
+                                    <?php endif; ?>
                                 </td>
+
                             </tr>
                         <?php endforeach; ?>
                     </tbody>

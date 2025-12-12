@@ -12,6 +12,11 @@ class Lesson {
         $stmt->execute([$course_id]);
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+    public function getById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM lessons WHERE id=?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
 
     public function create($data) {
         $stmt = $this->db->prepare("INSERT INTO lessons

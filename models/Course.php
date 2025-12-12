@@ -189,4 +189,9 @@ class Course {
             return is_array($criteria) ? [] : null;
         }
     }
+    public function getById($id) {
+        $stmt = $this->db->prepare("SELECT * FROM lessons WHERE id=?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_OBJ);
+    }
 }
