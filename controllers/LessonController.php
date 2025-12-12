@@ -30,7 +30,7 @@ class LessonController
             header('Location: /instructor/courses');
             exit;
         }
-
+        $course = $this->courseModel->find($course_id);
         $lessons = $this->lessonModel->getByCourse($course_id);
         require 'views/instructor/lessons/manage.php';
     }
@@ -59,7 +59,7 @@ class LessonController
         if ($this->lessonModel->create($data)) {
             $_SESSION['success'] = "Thêm bài học thành công!";
         }
-        header("Location: /instructor/course/$course_id/lessons");
+        header("Location: " . BASE_URL . "/instructor/course/$course_id/lessons");
         exit;
     }
 
@@ -77,41 +77,44 @@ class LessonController
     }
 
     // Cập nhật bài học
-    public function update($lesson_id)
-    {
-        $lesson = $this->lessonModel->find($lesson_id);
-        $course = $this->courseModel->find($lesson->course_id);
-        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
-            die("Không có quyền!");
-        }
+    public function update($lesson_id) {
+    $lesson = $this->lessonModel->find($lesson_id);
+    if (!$lesson) die("Không có quyền!");
 
-        $data = [
-            'title'     => trim($_POST['title']),
-            'content'   => $_POST['content'] ?? '',
-            'video_url' => $_POST['video_url'] ?? '',
-            'order'     => $_POST['order'] ?? 999
-        ];
+    $course_id = $lesson->course_id;
 
-        $this->lessonModel->update($lesson_id, $data);
+    $data = [
+        'title'     => trim($_POST['title']),
+        'content'   => $_POST['content'] ?? '',
+        'video_url' => $_POST['video_url'] ?? '',
+        'order'     => $_POST['order'] ?? 999
+    ];
+
+    if ($this->lessonModel->update($lesson_id, $data)) {
         $_SESSION['success'] = "Cập nhật bài học thành công!";
-        header("Location: /instructor/course/{$lesson->course_id}/lessons");
-        exit;
+    } else {
+        $_SESSION['error'] = "Cập nhật thất bại!";
     }
+
+    // Quay về trang quản lý bài học cùng khóa
+    header("Location: " . BASE_URL . "/instructor/course/$course_id/lessons");
+    exit;
+}
+
 
     // Xóa bài học
-    public function delete($lesson_id)
-    {
-        $lesson = $this->lessonModel->find($lesson_id);
-        if ($lesson) {
-            $course = $this->courseModel->find($lesson->course_id);
-                if ($course->instructor_id == $_SESSION['user']['id']) {
-                $this->lessonModel->delete($lesson_id);
-                $_SESSION['success'] = "Xóa bài học thành công!";
-            }
-        }
-        header("Location: /instructor/course/{$lesson->course_id}/lessons");
-        exit;
+    public function delete($lesson_id) {
+    $lesson = $this->lessonModel->find($lesson_id);
+    if ($lesson) {
+        $course_id = $lesson->course_id;
+        $this->lessonModel->delete($lesson_id);
+        $_SESSION['success'] = "Xóa bài học thành công!";
     }
+
+    header("Location: " . BASE_URL . "/instructor/course/$course_id/lessons");
+    exit;
+}
+
 
     // Upload tài liệu cho bài học
     public function uploadMaterial($lesson_id)
@@ -144,7 +147,7 @@ class LessonController
             $_SESSION['success'] = "Upload tài liệu thành công!";
         }
 
-        header("Location: /instructor/course/{$lesson->course_id}/lessons");
-        exit;
+        header("Location: " . BASE_URL . "/instructor/course/{$lesson->course_id}/lessons");
+
     }
 }
