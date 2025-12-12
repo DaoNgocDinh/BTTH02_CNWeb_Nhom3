@@ -43,8 +43,12 @@
                     👥 <span>Quản lý người dùng</span>
                 </a>
 
+                <a href="<?= BASE_URL ?>/instructor/course/manage" class="nav-link">
+                    📚 <span>Quản lý khóa học</span>
+                </a>
+
                 <a href="<?= BASE_URL ?>/admin/categories" class="nav-link">
-                    📂 <span>Quản lý khóa học</span>
+                    📂 <span>Quản lý thể loại</span>
                 </a>
 
                 <a href="<?= BASE_URL ?>/admin/statistics" class="nav-link">
@@ -90,6 +94,14 @@
                 
                 <?php elseif ($role == 1): ?>
                 
+                <a href="<?= BASE_URL ?>/instructor/dashboard" class="nav-link">
+                    📊 <span>Trang chủ</span>
+                </a>
+
+                <a href="<?= BASE_URL ?>/instructor/course/manage" class="nav-link">
+                    📚 <span>Quản lý khóa học</span>
+                </a>
+
                 <a href="<?= BASE_URL ?>/teacher/lessons" class="nav-link">
                     📋 <span>Quản lý bài học</span>
                 </a>

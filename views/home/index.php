@@ -43,11 +43,12 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
                     <?php 
                         $st = $enrollmentStatusMap[$c['id']] ?? null;
                     ?>
+                    <?php if (!empty($_SESSION['user']['id'])): ?>
                     <form method="POST" action="<?= BASE_URL ?>/enroll">
                             <input type="hidden" name="course_id" value="<?= $c['id'] ?>">
-                            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
                             <button type="submit" name="action" value="register" class="btn small">Đăng ký học môn</button>
                         </form>
+                    <?php endif; ?>
                     <!-- Nút xem chi tiết -->
                     <a href="<?= BASE_URL ?>/courses/<?= $c['id'] ?>" class="btn small">
                         Xem chi tiết
