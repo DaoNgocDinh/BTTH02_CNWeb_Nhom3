@@ -2,6 +2,7 @@
 $title = "Quản lý bài học: " . htmlspecialchars($course->title);
 require_once __DIR__ . '/../../layouts/header.php';
 require_once __DIR__ . '/../../layouts/sidebar.php';
+
 ?>
 
 <style>

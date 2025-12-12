@@ -565,3 +565,30 @@ html,body { height: 100%; margin: 0; font-family: system-ui, -apple-system, "Seg
     font-weight: 600;
     margin-bottom: 20px;
 }
+
+/* quản lý thể loại */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.btn {
+    margin-right: 5px;
+}
+
+.alert {
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+
+

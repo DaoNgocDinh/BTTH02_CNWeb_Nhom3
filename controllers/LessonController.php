@@ -3,6 +3,7 @@ require_once 'models/Lesson.php';
 require_once 'models/Material.php';
 require_once 'models/Course.php';
 
+
 class LessonController
 {
     private $lessonModel;
@@ -22,17 +23,27 @@ class LessonController
     }
 
     // Quản lý bài học của 1 khóa học
-    public function index($course_id)
-    {
-        $course = $this->courseModel->find($course_id);
-        if (!$course || $course->instructor_id != $_SESSION['user']['id']) {
-            $_SESSION['error'] = "Không có quyền!";
-            header('Location: /instructor/courses');
+     public function index($courseId) {
+        $user = $_SESSION['user'] ?? null;
+        if (!$user || $user['role'] < 1) {
+            header('Location: ' . BASE_URL . '/login');
             exit;
         }
-        $lessons = $this->lessonModel->getByCourse($course_id);
-        require 'views/instructor/lessons/manage.php';
+
+        $course = $this->courseModel->find($courseId);
+
+        // Kiểm tra quyền: instructor phải là chủ sở hữu hoặc admin
+        if ($user['role'] == 1 && $course->instructor_id != $user['id']) {
+            $_SESSION['error'] = "Bạn không có quyền truy cập khóa học này!";
+            header('Location: ' . BASE_URL . '/instructor/course/manage');
+            exit;
+        }
+
+        $lessons = $this->lessonModel->getByCourse($courseId);
+
+        require_once __DIR__ . '/../views/instructor/lessons/manage.php';
     }
+
     
 
     // Form thêm bài học
@@ -117,37 +128,34 @@ class LessonController
 
 
     // Upload tài liệu cho bài học
-    public function uploadMaterial($lesson_id)
-    {
-        $lesson = $this->lessonModel->find($lesson_id);
-        if (!$lesson) die("Bài học không tồn tại!");
-
-        $course = $this->courseModel->find($lesson->course_id);
-        if ($course->instructor_id != $_SESSION['user']['id']) die("Không có quyền!");
-
-        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['files']) && count($_FILES['files']['error']) > 0) {
-            $uploadDir = 'assets/uploads/materials/';
-
-            foreach ($_FILES['files']['error'] as $key => $error) {
-                if ($error == 0) {
-                    $filename = time() . '_' . $_FILES['files']['name'][$key];
-                    $filepath = $uploadDir . $filename;
-                    $filetype = pathinfo($_FILES['files']['name'][$key], PATHINFO_EXTENSION);
-
-                    if (move_uploaded_file($_FILES['files']['tmp_name'][$key], $filepath)) {
-                        $this->materialModel->create([
-                            'lesson_id'  => $lesson_id,
-                            'filename'   => $_FILES['files']['name'][$key],
-                            'file_path'  => $filepath,
-                            'file_type'  => $filetype
-                        ]);
-                    }
-                }
-            }
-            $_SESSION['success'] = "Upload tài liệu thành công!";
+     public function upload($lessonId) {
+        $user = $_SESSION['user'] ?? null;
+        if (!$user || $user['role'] < 1) {
+            header('Location: ' . BASE_URL . '/login');
+            exit;
         }
 
-        header("Location: " . BASE_URL . "/instructor/course/{$lesson->course_id}/lessons");
+        $lesson = $this->lessonModel->find($lessonId);
+        $course = $this->courseModel->getById($lesson->course_id);
 
+        if (!$lesson || ($user['role'] == 1 && $course->instructor_id != $user['id'])) {
+            header('Location: ' . BASE_URL . '/403');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
+            $uploadDir = 'assets/uploads/lessons/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+            $fileName = time() . '_' . basename($_FILES['file']['name']);
+            move_uploaded_file($_FILES['file']['tmp_name'], $uploadDir . $fileName);
+
+            // TODO: Lưu đường dẫn file vào DB nếu cần
+
+            header('Location: ' . BASE_URL . '/instructor/lesson/manage/' . $course->id);
+            exit;
+        }
+
+        require 'views/instructor/lesson/upload.php';
     }
 }

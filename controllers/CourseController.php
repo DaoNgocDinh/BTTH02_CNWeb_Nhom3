@@ -276,29 +276,43 @@ class CourseController
     {
         include_once 'views/student/course_progress.php';
     }
-    public function dashboard()
-{
-    if (!isset($_SESSION['user']) || $_SESSION['user']['role'] < 1) {
+
+    public function instructorDashboard() {
+    // Kiểm tra đăng nhập & role giảng viên
+    if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
         header('Location: ' . BASE_URL . '/login');
         exit;
     }
 
-    $instructor_id = $_SESSION['user']['id'];
-    $courses = $this->courseModel->getByInstructor($instructor_id);
+    $instructorId = $_SESSION['user']['id'];
 
-    // Lấy danh sách học viên cho mỗi khóa học
-    $enrollment = new Enrollment(); // giả sử bạn đã có model Enrollment với getStudents($course_id)
+    // Lấy tất cả khóa học của giảng viên
+    $courseModel = new Course();
+    $courses = $courseModel->getByInstructor($instructorId); // trả về array of objects
+
+    // Lấy học viên đăng ký cho từng khóa học
     $coursesWithStudents = [];
+    $db = new Database();
+    $conn = $db->connect();
 
     foreach ($courses as $course) {
-        $students = $enrollment->getByStudent($course->id); // trả về mảng học viên
+        $stmt = $conn->prepare("
+            SELECT u.fullname, u.email
+            FROM enrollments e
+            JOIN users u ON e.student_id = u.id
+            WHERE e.course_id = ?
+        ");
+        $stmt->execute([$course->id]);
+        $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
         $coursesWithStudents[] = [
             'course' => $course,
             'students' => $students
         ];
     }
 
-    require 'views/instructor/dashboard.php';
+    // Gọi view dashboard
+    require_once __DIR__ . '/../views/instructor/dashboard.php';
 }
 
 }
