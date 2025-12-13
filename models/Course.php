@@ -52,19 +52,19 @@ class Course {
     public function update($id, $data, $image_name = null) {
         if ($image_name) {
             $stmt = $this->db->prepare("UPDATE courses SET
-                title=?, description=?, category_id=?, price=?, duration_weeks=?, level=?, image=?, updated_at=NOW()
+                title=?, description=?, instructor_id=?, category_id=?, price=?, duration_weeks=?, level=?, image=?, updated_at=NOW()
                 WHERE id=?");
             return $stmt->execute([
-                $data['title'], $data['description'], $data['category_id'],
+                $data['title'], $data['description'], $data['instructor_id'], $data['category_id'],
                 $data['price'], $data['duration_weeks'], $data['level'],
                 $image_name, $id
             ]);
         } else {
             $stmt = $this->db->prepare("UPDATE courses SET
-                title=?, description=?, category_id=?, price=?, duration_weeks=?, level=?, updated_at=NOW()
+                title=?, description=?, instructor_id=?, category_id=?, price=?, duration_weeks=?, level=?, updated_at=NOW()
                 WHERE id=?");
             return $stmt->execute([
-                $data['title'], $data['description'], $data['category_id'],
+                $data['title'], $data['description'], $data['instructor_id'], $data['category_id'],
                 $data['price'], $data['duration_weeks'], $data['level'], $id
             ]);
         }

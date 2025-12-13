@@ -1,38 +1,11 @@
 <?php
 // Users management view
-$title = 'Manage Users';
 require_once __DIR__ . '/../../layouts/header.php';
 require_once __DIR__ . '/../../layouts/sidebar.php';
 
-// Get search and filter parameters
+// Get search and filter parameters from GET
 $search = $_GET['search'] ?? '';
 $role_filter = $_GET['role'] ?? '';
-
-// Build query
-$query = 'SELECT id, username, email, fullname, role, created_at FROM users WHERE 1=1';
-$params = [];
-
-if (!empty($search)) {
-    $query .= ' AND (username LIKE ? OR email LIKE ? OR fullname LIKE ?)';
-    $search_term = '%' . $search . '%';
-    $params = [$search_term, $search_term, $search_term];
-}
-
-if ($role_filter !== '') {
-    $query .= ' AND role = ?';
-    $params[] = $role_filter;
-}
-
-$query .= ' ORDER BY created_at DESC';
-
-$db = \Database::connect();
-try {
-    $stmt = $db->prepare($query);
-    $stmt->execute($params);
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $users = [];
-}
 ?>
 
 <main class="p-8 bg-gray-100 min-h-screen">

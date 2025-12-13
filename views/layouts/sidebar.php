@@ -58,9 +58,9 @@
                     📂 <span>Quản lý thể loại</span>
                 </a>
 
-                <a href="<?= BASE_URL ?>/admin/statistics" class="nav-link">
+                <!-- <a href="<?= BASE_URL ?>/admin/statistics" class="nav-link">
                     📈 <span>Thống kê</span>
-                </a>
+                </a> -->
 
                 <div class="user-menu-wrapper">
 

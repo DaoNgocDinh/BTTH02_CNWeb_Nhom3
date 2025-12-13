@@ -192,6 +192,7 @@ class CourseController
         $data = [
             'title'          => trim($_POST['title']),
             'description'    => $_POST['description'],
+            'instructor_id'  => $_POST['instructor_id'] ?? $course->instructor_id,
             'category_id'    => $_POST['category_id'],
             'price'          => $_POST['price'],
             'duration_weeks' => $_POST['duration_weeks'],

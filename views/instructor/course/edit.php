@@ -33,6 +33,30 @@ if (empty($course)) {
         <form method="POST" action="<?= BASE_URL ?>/instructor/course/update/<?= $course->id ?>" 
               enctype="multipart/form-data" class="space-y-6">
 
+            <!-- Tên Giáo Viên (Chọn) -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    👨‍🏫 Giáo Viên <span class="text-red-500">*</span>
+                </label>
+                <select name="instructor_id" required
+                        class="w-full border border-gray-300 px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-300 outline-none transition">
+                    <option value="">-- Chọn giáo viên --</option>
+                    <?php
+                    require_once __DIR__ . '/../../../models/User.php';
+                    require_once __DIR__ . '/../../../config/Database.php';
+                    $db = Database::connect();
+                    $stmt = $db->prepare("SELECT id, fullname FROM users WHERE role = 1 ORDER BY fullname");
+                    $stmt->execute();
+                    $instructors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($instructors as $instr): ?>
+                        <option value="<?= $instr['id'] ?>" 
+                            <?= ($course->instructor_id == $instr['id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($instr['fullname']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
             <!-- Tên Khóa Học -->
             <div>
                 <label class="block text-sm font-semibold text-gray-700 mb-2">
