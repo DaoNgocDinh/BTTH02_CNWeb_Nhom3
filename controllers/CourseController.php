@@ -70,7 +70,7 @@ class CourseController
     // Public course detail
     public function show($id)
     {
-        $course = $this->courseModel->find($id);
+        $course = $this->courseModel->getInfoCourseByCID($id);
         if (!$course) {
             http_response_code(404);
             echo "<h1>Course not found</h1>";

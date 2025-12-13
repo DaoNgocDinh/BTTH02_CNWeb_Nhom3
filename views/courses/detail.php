@@ -1,27 +1,31 @@
-<?php
-$title = htmlspecialchars($course->title); 
+<?php       
 require_once __DIR__ . '/../layouts/header.php';
-?>
 
+// `$courses` and optional `$enrollmentStatusMap` are provided by `HomeController`
+$courses = $courses ?? [];
+$enrollmentStatusMap = $enrollmentStatusMap ?? [];
+?>
+<?php require_once __DIR__ . '/../layouts/sidebar.php'; ?>
 <div class="course-detail-container">
-    <!-- BACK BUTTON -->
     <a href="<?= BASE_URL ?>/" class="back-btn">← Quay về trang chủ</a>
 
-    <!-- COURSE HEADER -->
-    <h1><?= htmlspecialchars($course->title) ?></h1>
-    <p class="description"><?= nl2br(htmlspecialchars($course->description ?? 'Không có mô tả')) ?></p>
+    <h1><?= htmlspecialchars($course['title'] ?? '') ?></h1>
 
-    <!-- INFO GRID -->
+    <p class="description">
+        <?= nl2br(htmlspecialchars($course['description'] ?? 'Không có mô tả')) ?>
+    </p>
+
     <div class="info">
-        <p><strong>Thể loại:</strong> <?= htmlspecialchars($course->category_name ?? '-') ?></p>
-        <p><strong>Miêu tả thể loại:</strong> <?= htmlspecialchars($course->category_description ?? '-') ?></p>
-        <p><strong>Giá:</strong> <?= !empty($course->price) ? '$' . number_format($course->price, 2) : 'Free' ?></p>
-        <p><strong>Thời lượng:</strong> <?= htmlspecialchars($course->duration_weeks ?? '-') ?> tuần</p>
-        <p><strong>Level:</strong> <?= htmlspecialchars($course->level ?? '-') ?></p>
-        <p><strong>Course ID:</strong> <?= htmlspecialchars($course->id) ?></p>
+        <p><strong>Thể loại:</strong> <?= htmlspecialchars($course['category_name'] ?? '-') ?></p>
+        <p><strong>Miêu tả thể loại:</strong> <?= htmlspecialchars($course['category_description'] ?? '-') ?></p>
+        <p><strong>Giá:</strong>
+            <?= !empty($course['price']) ? '$' . number_format($course['price'], 2) : 'Free' ?>
+        </p>
+        <p><strong>Thời lượng:</strong> <?= htmlspecialchars($course['duration_weeks'] ?? '-') ?> tuần</p>
+        <p><strong>Level:</strong> <?= htmlspecialchars($course['level'] ?? '-') ?></p>
+        <p><strong>Course ID:</strong> <?= htmlspecialchars($course['id'] ?? '-') ?></p>
     </div>
 
-    <!-- ENROLL BUTTON -->
     <a href="<?= BASE_URL ?>/my-courses" class="enroll-btn">Đăng ký học</a>
 </div>
 
