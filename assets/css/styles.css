@@ -1,0 +1,594 @@
+/* Simple plain CSS thay cho Tailwind */
+* { box-sizing: border-box; }
+html,body { height: 100%; margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: #f8fafc; }
+
+.auth-page {
+    min-height: 100vh;
+    align-items: center;          
+    justify-content: flex-start;  
+    padding: 2rem 1rem 2rem 16rem; 
+    background: linear-gradient(135deg, #eff6ff 0%, #eef2ff 100%);
+}
+
+/* Responsive: trên màn nhỏ giữ center để không bị quá sát lề */
+@media (max-width: 768px) {
+    .auth-page {
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .auth-card {
+        max-width: 100%;
+        border-radius: 14px;
+    }
+}
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(6px);
+    padding: 2rem;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+}
+
+.auth-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg,#2563eb,#4f46e5);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.flash {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+.flash-success {
+    background: #ecfdf5;
+    border: 1px solid #34d399;
+    color: #065f46;
+}
+
+.flash-error {
+    background: #fff1f2;
+    border: 1px solid #fb7185;
+    color: #9f1239;
+}
+
+.form { display: block; margin: 0; }
+
+.form-group { margin-bottom: 1rem; }
+
+.form-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #374151;
+    margin-bottom: 0.4rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.12);
+}
+
+.btn {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg,#2563eb,#4f46e5);
+    box-shadow: 0 8px 20px rgba(79,70,229,0.12);
+    transition: filter .12s ease, transform .08s ease;
+    font-size: 1rem;
+}
+
+.btn:hover { filter: brightness(.95); transform: translateY(-1px); }
+
+.text-muted {
+    text-align: center;
+    color: #6b7280;
+    margin-top: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.link {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover { text-decoration: underline; }
+
+
+/* SIGNUP */
+/* Register Page */
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background: linear-gradient(135deg, #dee2e7 0%, #07041d 100%);
+    padding: 1rem;
+    padding: 1rem 1rem 1rem 16rem;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(248, 246, 246, 0);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 25px rgba(7, 7, 7, 0.5);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    border: 1px solid #9b9ca0;
+}
+
+.auth-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(90deg, #34373b, #6c6b85);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.form { display: block; }
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.btn {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border-radius: 0.75rem;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(90deg, #34373b, #6c6b85);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: filter 0.2s, transform 0.1s;
+    font-size: 1rem;
+}
+
+.btn:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+}
+
+.text-muted {
+    text-align: center;
+    color: #d4d7dd;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+}
+
+.link {
+    color: #374151;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
+
+.flash {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+    border: 1px solid;
+}
+
+.flash-success {
+    background: #ecfdf5;
+    border-color: #34d399;
+    color: #065f46;
+}
+
+.flash-error {
+    background: #fff1f2;
+    border-color: #fb7185;
+    color: #9f1239;
+}
+
+/* split layout for auth pages */
+
+
+/* left card reuses .auth-card styles; ensure it doesn't expand too wide */
+.auth-left { 
+    flex: 0 1 520px; 
+    display: flex;
+}
+.auth-right { 
+    flex: 1;
+    flex-direction: column;
+    max-width: 900px; 
+    min-height: 500px; 
+    height: auto;
+    display: flex; 
+    align-items: center;
+    justify-content: center; 
+    /* Tăng độ mờ ảo, làm cho khung rõ ràng và nổi bật hơn */
+    background: rgba(43, 44, 52, 0.15); 
+    backdrop-filter: blur(15px); 
+    /* Tăng độ dày và làm mờ border */
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    border-radius: 28px;
+    padding: 3rem;
+    z-index: 100;
+}
+
+.auth-panel {
+    color: #fff;
+    padding: 2rem;
+    width: 100%;
+    text-align: center;
+}
+
+.panel-title {
+    font-size: 5.5rem;
+    font-weight: 900; 
+    text-align: center;
+    background: linear-gradient(90deg, #e0e0e0, #ffffff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -1px;
+    text-shadow: 0 4px 10px rgba(255, 255, 255, 0.1); 
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 1.5rem;
+}
+
+.panel-sub {
+    margin-top: 0.5rem;
+    font-size: 2rem;
+    opacity: 1;
+}
+
+/* Responsive: stack vertically on small screens */
+@media (max-width: 900px) {
+    .auth-container { flex-direction: column; padding: 1rem; }
+    .auth-left, .auth-right { flex: 1 1 100%; width: 100%; }
+    .auth-panel { margin-top: 1rem; }
+}
+
+/* SIDEBAR */
+/* --- BASE STYLES --- */
+.navbar {
+    width: 100%;
+    background: linear-gradient(to right, #92979d, #1b232f);
+    color: #ffffff;
+    padding: 1rem 1.5rem; /* px-6 py-4 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* LEFT: Logo */
+.navbar-logo {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    letter-spacing: 0.05em; /* tracking-wide */
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+}
+
+.navbar-logo:hover {
+    color: #60a5fa; /* hover:text-blue-400 */
+}
+
+/* RIGHT: Menu Items */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* gap-6 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* font-medium */
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem; /* gap-1 */
+    text-decoration: none;
+    color: #ffffff;
+    transition: color 0.15s ease-in-out;
+}
+
+.nav-link:hover {
+    color: #60a5fa; /* hover:text-blue-400 */
+}
+
+.nav-separator {
+    color: #9ca3af; /* text-gray-500 */
+}
+
+
+/* --- USER DROPDOWN & AVATAR STYLES --- */
+
+/* Khối bao bọc Dropdown */
+.user-menu-wrapper {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    /* Loại bỏ text-right cũ, dropdown tự căn */
+}
+
+/* Khối kích hoạt Dropdown (Avatar + Tên) */
+.user-info-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.user-info-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Avatar Image */
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* Tròn */
+    object-fit: cover;
+    border: 2px solid #60a5fa; /* Viền xanh nhẹ */
+}
+
+.user-name {
+    font-weight: 600;
+}
+
+/* Nội dung Dropdown */
+.user-dropdown-content {
+    position: absolute;
+    top: 100%; /* Đặt ngay dưới khối kích hoạt */
+    right: 0;
+    z-index: 50; /* Cao hơn các nội dung khác */
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    min-width: 200px;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+
+    /* ẨN MẶC ĐỊNH */
+    display: none; 
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    transform: translateY(-5px); /* Hiệu ứng trượt nhẹ */
+}
+
+.user-menu-wrapper::before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 46px; /* Vị trí trên cùng của dropdown */
+    right: 0; /* Căn phải */
+    width: 100%;
+    height: 15px;
+}
+/* Hiển thị Dropdown khi hover (chỉ dùng CSS) */
+.user-menu-wrapper:hover .user-dropdown-content {
+    display: block; /* Hiện ra */
+    opacity: 1; /* Mờ dần */
+    transform: translateY(0); /* Vị trí gốc */
+}
+
+/* Chi tiết người dùng trong Dropdown */
+.user-details-summary {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    color: #374151;
+}
+
+.dropdown-hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 0.5rem 0;
+}
+
+/* Menu items */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    color: #374151;
+    font-size: 0.9rem;
+    transition: background-color 0.15s;
+}
+
+.dropdown-item:hover {
+    background-color: #f3f4f6;
+}
+
+.dropdown-icon {
+    font-size: 1.1em;
+}
+
+.logout-link {
+    color: #dc2626; /* Màu đỏ cho Logout */
+}
+.logout-link:hover {
+     background-color: #fee2e2;
+}
+
+
+/* ===== HOME ===== */
+
+.hero{
+    min-height: 300px;
+    background: linear-gradient(to right, #1a1a1a 0%, #4f4f4f 50%, #1a1a1a 100%);    
+    color: white;
+    text-align:center;
+    padding:4rem 1rem;
+}
+
+.hero h1{
+    font-size:3rem;
+    margin:0;
+}
+
+.hero input{
+    margin-top:1.5rem;
+    padding:.7rem 1rem;
+    width:100%;
+    max-width:420px;
+    border:none;
+    border-radius:12px;
+    color: #040a18;
+}
+
+.home-courses{
+    padding:3rem 2rem;
+}
+
+.home-courses h2{
+    margin-bottom:1.5rem;
+    font-weight: 700;
+}
+
+/* Reuse grid code */
+.course-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap:1.5rem;
+}
+
+.course-card{
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #eff6ff 0%, #080e22 100%);
+    padding:1rem;
+    border-radius:16px;
+    box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+.course-card img{
+    width:100%;
+    height:140px;
+    object-fit:cover;
+    border-radius:12px;
+    margin-bottom: 20px;
+}
+
+.course-card h3{
+    margin:.8rem 0 0;
+    padding-bottom: 10px;
+}
+.course-card p.price{
+    margin-top:auto;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #040a18;
+}
+.course-card small{
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.course-card a {
+    text-decoration:none;
+    font-weight:600;
+}
+ .course-actions {
+    margin-top: 1rem; 
+    text-align: right;
+}
+.course-actions button {
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* quản lý thể loại */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.btn {
+    margin-right: 5px;
+}
+
+.alert {
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+
+
