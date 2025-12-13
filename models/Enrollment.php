@@ -6,6 +6,20 @@ class Enrollment
 {
     private static $table = 'enrollments';
 
+    public static function getStudentsByCourse($courseId)
+{
+    $db = Database::connect();
+    $stmt = $db->prepare("
+        SELECT u.id, u.fullname, u.email
+        FROM enrollments e
+        JOIN users u ON u.id = e.user_id
+        WHERE e.course_id = ?
+    ");
+    $stmt->execute([$courseId]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
     public static function getAll()
     {
         $db = \Database::connect();

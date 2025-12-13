@@ -71,6 +71,7 @@ try {
     // Dashboard
     $router->get('/admin/dashboard', [AdminController::class, 'dashboard']);
     $router->get('/admin/statistics', [AdminController::class, 'statistics']);
+    $router->get('/students/dashboard', [AdminController::class, 'dashboard_1']);
 
     // User Management
     $router->get('/admin/users', [AdminController::class, 'manageUsers']);

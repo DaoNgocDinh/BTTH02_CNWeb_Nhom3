@@ -9,6 +9,11 @@ class HomeController
             header('Location: ' . BASE_URL . '/admin/dashboard');
             exit;
         }
+
+        if (isset($_SESSION['user']) && isset($_SESSION['user']['role']) && (int)$_SESSION['user']['role'] === 1) {
+            header('Location: ' . BASE_URL . '/students/dashboard');
+            exit;
+        }
         // Load courses for homepage (public). If user logged in, also load enrollment status.
         require_once __DIR__ . '/../models/Course.php';
         require_once __DIR__ . '/../models/Enrollment.php';

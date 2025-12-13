@@ -94,7 +94,7 @@
                 
                 <?php elseif ($role == 1): ?>
                 
-                <a href="<?= BASE_URL ?>/instructor/dashboard" class="nav-link">
+                <a href="<?= BASE_URL ?>/" class="nav-link">
                     📊 <span>Trang chủ</span>
                 </a>
 

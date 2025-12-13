@@ -52,7 +52,7 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
                     <?php endif; ?>
                     <!-- Nút xem chi tiết -->
                     <a href="<?= BASE_URL ?>/courses/<?= $c['id'] ?>" class="btn small">
-                        Xem chi tiết
+                        Xem chi tiết 12333333
                     </a>
 
                 </div>

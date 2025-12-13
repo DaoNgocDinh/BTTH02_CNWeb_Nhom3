@@ -281,12 +281,11 @@ class CourseController
     $instructor_id = $_SESSION['user']['id'];
     $courses = $this->courseModel->getByInstructor($instructor_id);
 
-    // Lấy danh sách học viên cho mỗi khóa học
-    $enrollment = new Enrollment(); // giả sử bạn đã có model Enrollment với getStudents($course_id)
     $coursesWithStudents = [];
 
     foreach ($courses as $course) {
-        $students = $enrollment->getByStudent($course->id); // trả về mảng học viên
+        $students = Enrollment::getStudentsByCourse($course->id);
+
         $coursesWithStudents[] = [
             'course' => $course,
             'students' => $students

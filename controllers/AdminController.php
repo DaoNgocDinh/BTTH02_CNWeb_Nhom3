@@ -55,6 +55,12 @@ class AdminController {
         require_once __DIR__ . '/../views/admin/dashboard.php';
     }
 
+    public function dashboard_1()
+    {
+        $title = 'Dashboard';
+        require_once __DIR__ . '/../views/instructor/dashboard.php';
+    }
+
     // Manage users
     public function manageUsers()
     {
