@@ -106,7 +106,7 @@ try {
     $router->get('/instructor/lesson/edit/{id}', [LessonController::class, 'edit']);
     $router->post('/instructor/lesson/update/{id}', [LessonController::class, 'update']);
     $router->get('/instructor/lesson/delete/{id}', [LessonController::class, 'delete']);
-    $router->post('/instructor/lesson/upload/{id}', [LessonController::class, 'uploadMaterial']);
+    $router->post('/instructor/lesson/upload/{id}', [LessonController::class, 'upload']);
     // Dispatch the request
     $router->dispatch($_SERVER['REQUEST_METHOD'], $requestUri);
 

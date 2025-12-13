@@ -1,184 +1,99 @@
 <?php 
-// Đảm bảo bạn đã liên kết file instructor_dashboard.css trong layout/header.php
 require_once __DIR__ . '/../layouts/header.php'; 
 require_once __DIR__ . '/../layouts/sidebar.php'; 
 ?>
 
-<div class="container mt-4">
-    <h1 class="mb-4">Khóa học của tôi</h1>
+<div class="min-h-screen bg-gradient-to-b from-slate-100 to-slate-200 py-12 px-4">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-12">
+            <div class="inline-block">
+                <h1 class="text-5xl md:text-5xl font-bold bg-gradient-to-r from-slate-700 to-amber-700 bg-clip-text text-transparent mb-4">
+                    Khóa học của tôi
+                </h1>
+                <div class="h-1 w-32 bg-gradient-to-r from-slate-700 to-amber-700 rounded-full"></div>
+            </div>
+        </div>
 
-    <?php if (!empty($coursesWithStudents)): ?>
-        <div class="row">
-            <?php foreach ($coursesWithStudents as $item):
-                $course = $item['course'];
-                $students = $item['students'];
-                $imagePath = !empty($course->image) ? BASE_URL . '/assets/uploads/courses/' . $course->image : BASE_URL . '/assets/uploads/courses/default.jpg';
-            ?>
-                <div class="col-sm-6 col-md-4 col-lg-3 mb-4"> 
-                    <div class="card h-100 shadow-sm">
-                        <img src="<?= $imagePath ?>" class="card-img-top" alt="<?= htmlspecialchars($course->title) ?>">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title"><?= htmlspecialchars($course->title) ?></h5>
-                            <p class="card-text text-truncate"><?= htmlspecialchars($course->description) ?></p>
-                            
-                            <p><strong>Thể loại:</strong> <?= htmlspecialchars($course->category_id) ?></p>
-                            <p><strong>Giá:</strong> <?= number_format($course->price) ?> VND</p>
-                            <p><strong>Thời lượng:</strong> <?= $course->duration_weeks ?> tuần</p>
-                            <p><strong>Level:</strong> <?= htmlspecialchars($course->level) ?></p>
+        <?php if (!empty($coursesWithStudents)): ?>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <?php foreach ($coursesWithStudents as $item):
+                    $course = $item['course'];
+                    $students = $item['students'];
+                    $imagePath = !empty($course->image) ? BASE_URL . '/assets/uploads/courses/' . $course->image : BASE_URL . '/assets/uploads/courses/default.jpg';
+                ?>
 
-                            <a href="<?= BASE_URL ?>/instructor/course/<?= $course->id ?>/lessons" class="btn btn-primary mt-auto">Xem bài học</a>
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 hover:-translate-y-4 transform flex flex-col relative border border-gray-100">
+                    
+                    <!-- STUDENT COUNT BADGE -->
+                    <div class="absolute top-4 right-4 bg-gradient-to-r from-slate-700 to-amber-700 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg z-10 backdrop-blur-sm">
+                        👥 <?= count($students) ?>
+                    </div>
 
-                            <div class="mt-3">
-                                <h6>Học viên đăng ký (<?= count($students) ?>):</h6>
-                                <?php if (!empty($students)): ?>
-                                    <ul class="list-unstyled student-list-scroll">
-                                        <?php foreach ($students as $s): ?>
-                                            <li>• <?= htmlspecialchars($s['fullname'] ?? '') ?> (<?= htmlspecialchars($s['email'] ?? '') ?>)</li>
-                                        <?php endforeach; ?>
-                                    </ul>
-                                <?php else: ?>
-                                    <p>Chưa có học viên nào đăng ký.</p>
-                                <?php endif; ?>
+                    <!-- IMAGE CONTAINER -->
+                    <div class="relative overflow-hidden h-48 bg-gray-200">
+                        <img 
+                            src="<?= $imagePath ?>" 
+                            alt="<?= htmlspecialchars($course->title) ?>"
+                            class="w-full h-full object-cover group-hover:scale-125 transition-transform duration-500"
+                        >
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300"></div>
+                    </div>
+
+                    <!-- BODY -->
+                    <div class="p-5 flex flex-col flex-grow bg-white">
+                        
+                        <!-- TITLE -->
+                        <h3 class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 leading-tight group-hover:text-slate-700 transition-colors">
+                            <?= htmlspecialchars($course->title) ?>
+                        </h3>
+
+                        <!-- DESCRIPTION -->
+                        <p class="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed flex-grow">
+                            <?= htmlspecialchars($course->description) ?>
+                        </p>
+
+                        <!-- INFO GRID -->
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <div class="group/info bg-gradient-to-br from-slate-50 to-slate-100 p-3 rounded-lg border border-slate-300 hover:border-slate-400 transition-all">
+                                <p class="text-xs font-semibold text-slate-700 uppercase tracking-wide">Thể loại</p>
+                                <p class="text-sm font-bold text-gray-900 truncate group-hover/info:text-slate-700"><?= htmlspecialchars($course->category_id) ?></p>
+                            </div>
+                            <div class="group/info bg-gradient-to-br from-amber-50 to-amber-100 p-3 rounded-lg border border-amber-300 hover:border-amber-400 transition-all">
+                                <p class="text-xs font-semibold text-amber-700 uppercase tracking-wide">Level</p>
+                                <p class="text-sm font-bold text-gray-900 group-hover/info:text-amber-700"><?= htmlspecialchars($course->level) ?></p>
+                            </div>
+                            <div class="group/info bg-gradient-to-br from-stone-50 to-stone-100 p-3 rounded-lg border border-stone-300 hover:border-stone-400 transition-all">
+                                <p class="text-xs font-semibold text-stone-700 uppercase tracking-wide">Giá</p>
+                                <p class="text-sm font-bold text-gray-900 group-hover/info:text-stone-700"><?= number_format($course->price) ?> ₫</p>
+                            </div>
+                            <div class="group/info bg-gradient-to-br from-zinc-50 to-zinc-100 p-3 rounded-lg border border-zinc-300 hover:border-zinc-400 transition-all">
+                                <p class="text-xs font-semibold text-zinc-700 uppercase tracking-wide">Thời lượng</p>
+                                <p class="text-sm font-bold text-gray-900 group-hover/info:text-zinc-700"><?= $course->duration_weeks ?> tuần</p>
                             </div>
                         </div>
+
+                        <!-- BUTTON -->
+                        <a 
+                            href="<?= BASE_URL ?>/instructor/course/<?= $course->id ?>/lessons"
+                            class="w-full py-2 px-4 bg-gradient-to-r from-slate-700 to-amber-700 hover:from-slate-800 hover:to-amber-800 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-slate-400 active:scale-95 text-xs inline-block text-center mb-4 cursor-pointer border-0"
+                        >
+                            Xem bài học
+                        </a>
+
+
+
                     </div>
                 </div>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <p>Chưa có khóa học nào.</p>
-    <?php endif; ?>
+
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center py-16 bg-white/10 backdrop-blur-md rounded-2xl">
+                <div class="text-6xl mb-4"></div>
+                <p class="text-white text-2xl font-semibold mb-2">Chưa có khóa học nào.</p>
+                <p class="text-white/80">Hãy tạo khóa học đầu tiên của bạn</p>
+            </div>
+        <?php endif; ?>
+    </div>
 </div>
-<style>
-    /* --- BASE STYLES & CONTAINER --- */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f0f0;
-}
-
-.container.mt-4 {
-    padding-top: 30px;
-    padding-bottom: 30px;
-}
-
-h1.mb-4 {
-    margin-left: 5%;
-    color: #333;
-    width: fit-content;
-    font-weight: 900;
-    border-bottom: 2px solid #555;
-    padding-bottom: 10px;
-    margin-bottom: 30px !important;
-}
-
-/* --- CARD STYLING: WHITE TO DARK GRADIENT --- */
-.card {
-    border: none;
-    border-radius: 15px;
-    transition: transform 0.3s, box-shadow 0.3s;
-    overflow: hidden;
-    background-color: #ffffff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    margin-left: 20%; /* Thêm margin trái để căn lề trái cho các card */
-}
-
-.card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-}
-
-.card-img-top {
-    width: 100%;          /* Chiều ngang đầy đủ */
-    height: 150px;        /* Chiều cao bạn muốn */
-    object-fit: cover;    /* Giữ tỉ lệ nhưng cắt phần thừa */
-    display: block;       /* Tránh khoảng trắng thừa */
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.card-body {
-    /* Áp dụng Gradient từ Trắng (trên) sang Đen (dưới) */
-    background: linear-gradient(180deg, #ffffff 0%, #1a1a1a 100%); 
-    color: #333; /* Màu chữ mặc định cho phần sáng */
-    padding: 18px; /* Giảm padding bên trong */
-    display: flex;
-    flex-direction: column;
-}
-
-/* Điều chỉnh màu chữ cho phần tối (nửa dưới của card) */
-.card-title {
-    font-size: 1.1em; /* Giảm kích thước tiêu đề */
-    font-weight: 700;
-    color: #000000;
-    margin-bottom: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; 
-}
-
-.card-body p, .card-body h6 {
-    font-size: 0.9em; /* Giảm kích thước chữ */
-    margin-bottom: 4px;
-}
-
-/* Các thông tin nằm gần cuối (chứa danh sách học viên) */
-.card-body .mt-3 {
-    margin-top: 10px !important; 
-    padding-top: 10px;
-    border-top: 1px dashed rgba(255, 255, 255, 0.4); /* Đường kẻ trắng mờ */
-}
-
-/* Màu chữ trắng cho phần nội dung phía dưới của card (nơi gradient đậm) */
-.card-body .mt-3 h6, 
-.card-body .mt-3 p, 
-.card-body .mt-3 ul, 
-.card-body .mt-3 li {
-    color: #ffffff; 
-}
-
-.col-lg-3{
-    max-width: 25%;
-}
-
-/* Màu chữ đặc biệt cho các nhãn (Strong tag) */
-.card-body p strong {
-    color: #ffcc00; /* Màu vàng nổi bật trên nền tối */
-}
-
-/* --- STUDENT LIST SCROLLBAR --- */
-.student-list-scroll {
-    max-height: 100px !important; /* Giảm chiều cao tối đa của danh sách SV */
-    overflow-y: auto;
-    padding-left: 0;
-}
-
-.student-list-scroll::-webkit-scrollbar {
-    width: 6px;
-}
-
-.student-list-scroll::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.4); 
-    border-radius: 3px;
-}
-
-/* --- BUTTON STYLING --- */
-.btn-primary {
-    display: inline-block;
-    padding: 8px 15px; /* Giảm padding nút bấm */
-    font-size: 0.9em;
-    background-color: #007bff;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    text-transform: uppercase;
-    transition: background-color 0.3s, transform 0.1s;
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4);
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.6);
-}
-</style>

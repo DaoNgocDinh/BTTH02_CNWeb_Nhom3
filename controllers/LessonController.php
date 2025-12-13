@@ -131,31 +131,88 @@ class LessonController
      public function upload($lessonId) {
         $user = $_SESSION['user'] ?? null;
         if (!$user || $user['role'] < 1) {
-            header('Location: ' . BASE_URL . '/login');
+            header('Location: ' . BASE_URL . '/auth/login');
             exit;
         }
 
         $lesson = $this->lessonModel->find($lessonId);
-        $course = $this->courseModel->getById($lesson->course_id);
-
-        if (!$lesson || ($user['role'] == 1 && $course->instructor_id != $user['id'])) {
-            header('Location: ' . BASE_URL . '/403');
+        if (!$lesson) {
+            $_SESSION['error'] = "Bài học không tồn tại!";
+            header('Location: ' . BASE_URL . '/instructor/dashboard');
             exit;
         }
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
+        $course = $this->courseModel->find($lesson->course_id);
+        if (!$course) {
+            $_SESSION['error'] = "Khóa học không tồn tại!";
+            header('Location: ' . BASE_URL . '/instructor/dashboard');
+            exit;
+        }
+
+        if ($user['role'] == 1 && $course->instructor_id != $user['id']) {
+            $_SESSION['error'] = "Bạn không có quyền upload!";
+            header('Location: ' . BASE_URL . '/instructor/dashboard');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])) {
             $uploadDir = 'assets/uploads/lessons/';
             if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-            $fileName = time() . '_' . basename($_FILES['file']['name']);
-            move_uploaded_file($_FILES['file']['tmp_name'], $uploadDir . $fileName);
+            $uploadedFiles = [];
+            $errors = [];
 
-            // TODO: Lưu đường dẫn file vào DB nếu cần
+            // Xử lý multiple files
+            foreach ($_FILES['files']['tmp_name'] as $key => $tmpName) {
+                if (!empty($tmpName) && $_FILES['files']['error'][$key] === UPLOAD_ERR_OK) {
+                    $originalName = $_FILES['files']['name'][$key];
+                    $fileName = time() . '_' . uniqid() . '_' . basename($originalName);
+                    $filePath = $uploadDir . $fileName;
+                    
+                    if (move_uploaded_file($tmpName, $filePath)) {
+                        try {
+                            // Lưu vào database
+                            $result = $this->materialModel->create([
+                                'lesson_id' => $lessonId,
+                                'file_path' => $filePath,
+                                'file_name' => $originalName,
+                                'file_type' => pathinfo($filePath, PATHINFO_EXTENSION),
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+                            
+                            if ($result) {
+                                $uploadedFiles[] = $originalName;
+                            } else {
+                                $errors[] = "Lỗi lưu DB: " . $originalName;
+                            }
+                        } catch (Exception $e) {
+                            $errors[] = "Lỗi lưu: " . $originalName . " (" . $e->getMessage() . ")";
+                        }
+                    } else {
+                        $errors[] = "Không thể upload: " . $originalName;
+                    }
+                } else if (!empty($tmpName)) {
+                    $errors[] = "Lỗi file: " . $_FILES['files']['name'][$key];
+                }
+            }
 
-            header('Location: ' . BASE_URL . '/instructor/lesson/manage/' . $course->id);
+            // Tạo message phù hợp
+            if (!empty($uploadedFiles)) {
+                $_SESSION['success'] = " Tải lên " . count($uploadedFiles) . " tệp thành công!";
+            }
+            if (!empty($errors)) {
+                $_SESSION['error'] = " " . implode(", ", $errors);
+            }
+            if (empty($uploadedFiles) && empty($errors)) {
+                $_SESSION['error'] = " Vui lòng chọn file để upload!";
+            }
+
+            header('Location: ' . BASE_URL . '/instructor/course/' . $course->id . '/lessons');
             exit;
         }
 
-        require 'views/instructor/lesson/upload.php';
+        // Nếu không phải POST, redirect
+        header('Location: ' . BASE_URL . '/instructor/course/' . $course->id . '/lessons');
+        exit;
     }
 }
