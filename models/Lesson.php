@@ -39,9 +39,11 @@ class Lesson {
         return $stmt->execute([$id]);
     }
 
-    public function find($id) {
-        $stmt = $this->db->prepare("SELECT * FROM lessons WHERE id = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_OBJ);
-    }
+    public static function find($id) {
+    $db = Database::connect();
+    $stmt = $db->prepare("SELECT * FROM lessons WHERE id = ?");
+    $stmt->execute([$id]);
+    return $stmt->fetch(PDO::FETCH_OBJ);
+}
+
 }

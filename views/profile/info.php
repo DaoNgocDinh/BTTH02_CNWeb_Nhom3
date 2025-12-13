@@ -1,7 +1,14 @@
-<?php 
-$title = "Thông tin cá nhân";
-require_once __DIR__ . '/../layouts/header.php'; 
+<?php
+$title = 'Quản lý Thông Tin Cá Nhân';
+require_once __DIR__ . '/../layouts/header.php';
+
+// Lưu user cần edit vào biến khác trước khi sidebar ghi đè
+$editUser = $user ?? null;
+
 require_once __DIR__ . '/../layouts/sidebar.php';
+
+// Khôi phục user cần edit
+$user = $editUser;
 ?>
 
 <div class="profile-wrapper">

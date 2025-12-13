@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Online Course Management System
  */
@@ -70,7 +71,7 @@ try {
 
     $router->get('/course-progress', [EnrollmentController::class, 'courseProgress']);
     $router->post('/my-courses', [EnrollmentController::class, 'handleEnrollment']);
-    
+
     // ====== ENROLLMENT ======
     $router->post('/enroll', [EnrollmentController::class, 'handleEnrollment']);
 
@@ -93,7 +94,7 @@ try {
     $router->post('/admin/categories', [AdminController::class, 'storeCategory']);
     $router->get('/admin/categories/{id}/edit', [AdminController::class, 'editCategory']);
     $router->post('/admin/categories/{id}', [AdminController::class, 'updateCategory']);
-    
+
     //Course
     $router->get('/instructor/course/manage', [CourseController::class, 'manage']);
     $router->get('/instructor/courses', [CourseController::class, 'index']);
@@ -110,10 +111,18 @@ try {
     $router->get('/instructor/lesson/edit/{id}', [LessonController::class, 'edit']);
     $router->post('/instructor/lesson/update/{id}', [LessonController::class, 'update']);
     $router->get('/instructor/lesson/delete/{id}', [LessonController::class, 'delete']);
-    $router->post('/instructor/lesson/upload/{id}', [LessonController::class, 'uploadMaterial']);
+    $router->post(
+        '/instructor/lesson/upload/{id}',
+        [LessonController::class, 'uploadMaterial']
+    );
+
+
+    ///learn
+    $router->get('/learn/course/{id}', [CourseController::class, 'learn']);
+    $router->get('/learn/lesson/{id}', [LessonController::class, 'learn']);
+
     // Dispatch the request
     $router->dispatch($_SERVER['REQUEST_METHOD'], $requestUri);
-
 } catch (Exception $e) {
     http_response_code(500);
     echo "<!DOCTYPE html><html lang=\"vi\"><head><title>500 - Server Error</title></head><body>";
@@ -123,4 +132,3 @@ try {
     echo '<a href="/' . basename(__DIR__) . '/">Go to Homepage</a>';
     echo "</div></body></html>";
 }
-

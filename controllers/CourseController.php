@@ -315,5 +315,19 @@ class CourseController
     // Gọi view dashboard
     require_once __DIR__ . '/../views/instructor/dashboard.php';
 }
+public function learn($courseId)
+{
+    $user = $_SESSION['user'] ?? null;
+    if (!$user || $user['role'] != 0) {
+        header('Location: ' . BASE_URL . '/login');
+        exit;
+    }
+
+    $course = $this->courseModel->find($courseId);
+    $lessonModel = new Lesson();
+    $lessons = $lessonModel->getByCourse($courseId);
+
+    require 'views/student/course_lessons.php';
+}
 
 }

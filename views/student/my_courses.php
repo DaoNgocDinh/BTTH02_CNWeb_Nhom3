@@ -20,29 +20,25 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                 <?php $st = $course['status'] ?? null; ?>
 
                 <?php if ($st === 'active'): ?>
-                    <div class="course-actions">
-                        <span style="color: green; font-weight: bold;">Đang học</span>
-                        <form method="POST" action="<?= BASE_URL ?>/my-courses" style="display:inline">
-                            <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['id']) ?>">
-                            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
-                            <button type="submit" name="action" value="drop" class="btn small">Hủy môn học</button>
-                            <button style="display: none;" type="submit" name="action" value="complete" class="btn small">Hoàn thành môn học</button>
-                        </form>
-                    </div>
-                <?php elseif ($st === 'dropper' || $st === 'dropped'): ?>
-                    <div class="course-actions">
-                        <span style="color: #a00; font-weight: bold;">Đã hủy</span>
-                        <form method="POST" action="<?= BASE_URL ?>/my-courses" style="display:inline">
-                            <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['id']) ?>">
-                            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
-                            <button type="submit" name="action" value="reactivate" class="btn small">Tiếp tục học</button>
-                        </form>
-                    </div>
-                <?php elseif ($st === 'completed'): ?>
-                    <div class="course-actions">
-                        <span style="color: blue; font-weight: bold;">Hoàn thành</span>
-                    </div>
-                <?php endif; ?>
+    <div class="course-actions">
+        <span style="color: green; font-weight: bold;">Đang học</span>
+
+        <a href="<?= BASE_URL ?>/learn/course/<?= $course['id'] ?>"
+           class="btn small"
+           style="background:#0d6efd;color:#fff">
+            Vào học
+        </a>
+
+        <form method="POST" action="<?= BASE_URL ?>/my-courses" style="display:inline">
+            <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['id']) ?>">
+            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
+            <button type="submit" name="action" value="drop" class="btn small">
+                Hủy môn học
+            </button>
+        </form>
+    </div>
+<?php endif; ?>
+
 
             </div>
         <?php endforeach; ?>
