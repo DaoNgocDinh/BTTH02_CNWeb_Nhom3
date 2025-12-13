@@ -1,46 +1,19 @@
 <?php
 // Users management view
-$title = 'Manage Users';
 require_once __DIR__ . '/../../layouts/header.php';
 require_once __DIR__ . '/../../layouts/sidebar.php';
 
-// Get search and filter parameters
+// Get search and filter parameters from GET
 $search = $_GET['search'] ?? '';
 $role_filter = $_GET['role'] ?? '';
-
-// Build query
-$query = 'SELECT id, username, email, fullname, role, created_at FROM users WHERE 1=1';
-$params = [];
-
-if (!empty($search)) {
-    $query .= ' AND (username LIKE ? OR email LIKE ? OR fullname LIKE ?)';
-    $search_term = '%' . $search . '%';
-    $params = [$search_term, $search_term, $search_term];
-}
-
-if ($role_filter !== '') {
-    $query .= ' AND role = ?';
-    $params[] = $role_filter;
-}
-
-$query .= ' ORDER BY created_at DESC';
-
-$db = \Database::connect();
-try {
-    $stmt = $db->prepare($query);
-    $stmt->execute($params);
-    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $users = [];
-}
 ?>
 
 <main class="p-8 bg-gray-100 min-h-screen">
 	<div class="flex justify-between items-center mb-8">
-		<h1 class="text-4xl font-extrabold text-gray-800">Manage Users</h1>
+		<h1 class="text-4xl font-extrabold text-gray-800">Quản lý người dùng</h1>
 		<a href="<?= BASE_URL ?>/admin/users/create"
 		   class="px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-			+ Create User
+			+ Thêm người dùng
 		</a>
 	</div>
 
@@ -52,17 +25,17 @@ try {
 			       class="flex-1 min-w-64 px-4 py-2 border rounded-lg">
 			
 			<select name="role" class="px-4 py-2 border rounded-lg">
-				<option value="">All Roles</option>
+				<option value="">Tất cả</option>
 				<option value="0" <?= $role_filter === '0' ? 'selected' : '' ?>>User</option>
 				<option value="1" <?= $role_filter === '1' ? 'selected' : '' ?>>Teacher</option>
 				<option value="2" <?= $role_filter === '2' ? 'selected' : '' ?>>Admin</option>
 			</select>
 			
 			<button type="submit" class="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-				Search
+				Tìm kiếm
 			</button>
 			<a href="<?= BASE_URL ?>/admin/users" class="px-5 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition">
-				Reset
+				
 			</a>
 		</form>
 	</div>

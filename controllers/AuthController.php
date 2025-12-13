@@ -93,8 +93,8 @@ class AuthController {
             header('Location: ' . BASE_URL . '/admin/dashboard');
         }
         if ($user['role'] == 1) { // Giảng viên
-    header('Location: ' . BASE_URL . '/instructor/dashboard');
-} else {
+            header('Location: ' . BASE_URL . '/instructor/dashboard');
+        } else {
             header('Location: ' . BASE_URL . '/');
         }
         exit;

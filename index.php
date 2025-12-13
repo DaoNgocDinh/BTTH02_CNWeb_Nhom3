@@ -56,7 +56,7 @@ try {
     $router->get('/register', [AuthController::class, 'showRegister']);
     $router->post('/register', [AuthController::class, 'register']);
     $router->get('/logout', [AuthController::class, 'logout']);
-$router->get('/profile', [ProfileController::class, 'show']);
+    $router->get('/profile/info', [ProfileController::class, 'info']);
 
 
     // ====== COURSES (PUBLIC & STUDENT) ======

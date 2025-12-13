@@ -1,13 +1,16 @@
 <?php
-require_once __DIR__ ."/../config/Database.php";
+require_once __DIR__ . "/../config/Database.php";
 
 
-class Course {
+class Course
+{
     private $db;
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = Database::connect();
     }
-    public function getAll($instructor_id = null) {
+    public function getAll($instructor_id = null)
+    {
         if ($instructor_id) {
             $stmt = $this->db->prepare("SELECT c.*, cat.name as category_name
                                         FROM courses c
@@ -26,13 +29,15 @@ class Course {
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function find($id) {
+    public function find($id)
+    {
         $stmt = $this->db->prepare("SELECT * FROM courses WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_OBJ);
     }
 
-    public function create($data, $image_name) {
+    public function create($data, $image_name)
+    {
         $stmt = $this->db->prepare("INSERT INTO courses
             (title, description, instructor_id, category_id, price, duration_weeks, level, image, created_at, updated_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
@@ -49,38 +54,54 @@ class Course {
         ]);
     }
 
-    public function update($id, $data, $image_name = null) {
+    public function update($id, $data, $image_name = null)
+    {
         if ($image_name) {
             $stmt = $this->db->prepare("UPDATE courses SET
-                title=?, description=?, category_id=?, price=?, duration_weeks=?, level=?, image=?, updated_at=NOW()
+                title=?, description=?, instructor_id=?, category_id=?, price=?, duration_weeks=?, level=?, image=?, updated_at=NOW()
                 WHERE id=?");
             return $stmt->execute([
-                $data['title'], $data['description'], $data['category_id'],
-                $data['price'], $data['duration_weeks'], $data['level'],
-                $image_name, $id
+                $data['title'],
+                $data['description'],
+                $data['instructor_id'],
+                $data['category_id'],
+                $data['price'],
+                $data['duration_weeks'],
+                $data['level'],
+                $image_name,
+                $id
             ]);
         } else {
             $stmt = $this->db->prepare("UPDATE courses SET
-                title=?, description=?, category_id=?, price=?, duration_weeks=?, level=?, updated_at=NOW()
+                title=?, description=?, instructor_id=?, category_id=?, price=?, duration_weeks=?, level=?, updated_at=NOW()
                 WHERE id=?");
             return $stmt->execute([
-                $data['title'], $data['description'], $data['category_id'],
-                $data['price'], $data['duration_weeks'], $data['level'], $id
+                $data['title'],
+                $data['description'],
+                $data['instructor_id'],
+                $data['category_id'],
+                $data['price'],
+                $data['duration_weeks'],
+                $data['level'],
+                $id
             ]);
         }
     }
-    public function delete($id) {
+    public function delete($id)
+    {
         $stmt = $this->db->prepare("DELETE FROM courses WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
-    public function getByInstructor($instructor_id) {
+    public function getByInstructor($instructor_id)
+    {
         $stmt = $this->db->prepare("SELECT * FROM courses WHERE instructor_id = ?");
         $stmt->execute([$instructor_id]);
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function getCoursesByUserId($userId) {
+    public static function getCoursesByUserId($userId)
+    {
         $pdo = Database::connect();
 
         try {
@@ -116,17 +137,17 @@ class Course {
             }
 
             return [];
-
         } catch (PDOException $e) {
             return [];
         }
     }
 
-    public static function getInfoCourseByCID($courseId) {
+    public static function getInfoCourseByCID($courseId)
+    {
         $pdo = Database::connect();
 
         try {
-        $sql = "SELECT 
+            $sql = "SELECT 
             courses.id,
             courses.title,
             courses.description AS course_description,
@@ -138,16 +159,17 @@ class Course {
         FROM courses
         JOIN categories ON courses.category_id = categories.id
         WHERE courses.id = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$courseId]);
-        
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$courseId]);
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return null;
         }
     }
 
-    public static function searchCourse($criteria) {
+    public static function searchCourse($criteria)
+    {
         $pdo = Database::connect();
 
         try {
@@ -189,9 +211,17 @@ class Course {
             return is_array($criteria) ? [] : null;
         }
     }
-    public function getById($id) {
+    public function getById($id)
+    {
         $stmt = $this->db->prepare("SELECT * FROM lessons WHERE id=?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_OBJ);
+    }
+    public static function findById($id)
+    {
+        $db = Database::connect();
+        $stmt = $db->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

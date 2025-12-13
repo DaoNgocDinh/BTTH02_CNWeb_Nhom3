@@ -123,7 +123,7 @@ require_once __DIR__ . '/../../layouts/sidebar.php';
                             <form action="<?= BASE_URL ?>/instructor/lesson/upload" method="POST" enctype="multipart/form-data" class="inline-block">
                                 <input type="hidden" name="lesson_id" value="<?= $lesson->id ?>">
                                 <input type="file" name="files[]" multiple required>
-                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded">Upload</button>
+                                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded">Tải tài liệu</button>
                             </form>
                         </td>
                     </tr>

@@ -59,9 +59,32 @@ class AdminController {
     public function manageUsers()
     {
         $this->checkAdmin();
+        
+        // Get search and filter parameters
+        $search = $_GET['search'] ?? '';
+        $role_filter = $_GET['role'] ?? '';
+
+        // Build query
+        $query = 'SELECT id, username, email, fullname, role, created_at FROM users WHERE 1=1';
+        $params = [];
+
+        if (!empty($search)) {
+            $query .= ' AND (username LIKE ? OR email LIKE ? OR fullname LIKE ?)';
+            $search_term = '%' . $search . '%';
+            $params = [$search_term, $search_term, $search_term];
+        }
+
+        if ($role_filter !== '') {
+            $query .= ' AND role = ?';
+            $params[] = $role_filter;
+        }
+
+        $query .= ' ORDER BY created_at DESC';
+
         $db = Database::connect();
         try {
-            $stmt = $db->query('SELECT id, username, email, fullname, role FROM users ORDER BY id DESC');
+            $stmt = $db->prepare($query);
+            $stmt->execute($params);
             $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             $users = [];
@@ -253,12 +276,18 @@ class AdminController {
             exit;
         }
 
+        // Debug: log the ID being passed
+        error_log("DEBUG: editUser() called with id=$id");
+
         $user = User::findById($id);
         if (!$user) {
             $_SESSION['flash'] = ['type' => 'error', 'message' => 'User not found.'];
             header('Location: ' . BASE_URL . '/admin/users');
             exit;
         }
+
+        // Debug: log the user found
+        error_log("DEBUG: User found: " . json_encode($user));
 
         $title = 'Edit User';
         require_once __DIR__ . '/../views/admin/users/edit.php';

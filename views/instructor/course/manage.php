@@ -22,11 +22,11 @@ $courses = $allCourses;
 
 <main class="p-8 bg-gray-50 min-h-screen">
     <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Manage Courses</h1>
+        <h1 class="text-3xl font-bold text-gray-900">Khóa học của tôi</h1>
         <?php if ($isAdmin): ?>
             <a href="<?= BASE_URL ?>/instructor/course/create"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-all">
-                + Create Course
+                + Thêm khóa học
             </a>
         <?php endif; ?>
     </div>
@@ -82,10 +82,10 @@ $courses = $allCourses;
                                 <td class="px-6 py-4 flex gap-2">
                                     <?php if ($isAdmin): ?>
                                         <a href="<?= BASE_URL ?>/instructor/course/edit/<?= $course->id ?>"
-                                            class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
+                                            class="text-blue-600 hover:text-blue-800 font-medium">Sửa</a>
                                         <a href="<?= BASE_URL ?>/instructor/course/delete/<?= $course->id ?>"
                                             onclick="return confirm('Bạn chắc chắn muốn xóa khóa học này?');"
-                                            class="text-red-600 hover:text-red-800 font-medium">Delete</a>
+                                            class="text-red-600 hover:text-red-800 font-medium">Xóa</a>
                                     <?php elseif ($isInstructor): ?>
                                         <a href="<?= BASE_URL ?>/instructor/course/<?= $course->id ?>/lessons"
                                             class="text-green-600 hover:text-green-800 font-medium">Quản lý nội dung</a>

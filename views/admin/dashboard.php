@@ -8,7 +8,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
 <main class="p-8 bg-gray-100 min-h-screen">
 
     <!-- TITLE -->
-    <h1 class="text-4xl font-extrabold mb-8 text-gray-800">Admin Dashboard</h1>
+    <h1 class="text-4xl font-extrabold mb-8 text-gray-800">Trang tổng quan của quản trị viên</h1>
 
     <!-- STATS CARDS -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">

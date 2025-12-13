@@ -58,14 +58,14 @@
                     📂 <span>Quản lý thể loại</span>
                 </a>
 
-                <a href="<?= BASE_URL ?>/admin/statistics" class="nav-link">
+                <!-- <a href="<?= BASE_URL ?>/admin/statistics" class="nav-link">
                     📈 <span>Thống kê</span>
-                </a>
+                </a> -->
 
                 <div class="user-menu-wrapper">
 
                     <div class="user-info-toggle">
-
+                        <span>Tôi:</span>
                         <span class="user-name">
                             <?= htmlspecialchars($user['username']) ?>
                         </span>
@@ -82,7 +82,7 @@
                             <hr class="dropdown-hr">
                         </div>
 
-                        <a href="<?= BASE_URL ?>/profile" class="dropdown-item">
+                        <a href="<?= BASE_URL ?>/profile/info" class="dropdown-item">
                             ⚙️ Thông tin cá nhân
                         </a>
 
@@ -123,7 +123,7 @@
                             <hr class="dropdown-hr">
                         </div>
 
-                        <a href="<?= BASE_URL ?>/profile" class="dropdown-item">
+                        <a href="<?= BASE_URL ?>/profile/info" class="dropdown-item">
                             ⚙️ Thông tin cá nhân
                         </a>
 
@@ -151,7 +151,7 @@
                 <div class="user-menu-wrapper">
 
                     <div class="user-info-toggle">
-                        
+                        <span>Tôi:</span>
                         <span class="user-name">
                             <?= htmlspecialchars($user['username']) ?>
                         </span>
@@ -168,7 +168,7 @@
                             <hr class="dropdown-hr">
                         </div>
 
-                        <a href="<?= BASE_URL ?>/profile" class="dropdown-item">
+                        <a href="<?= BASE_URL ?>/profile/info" class="dropdown-item">
                             ⚙️ Thông tin cá nhân
                         </a>
 
