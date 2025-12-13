@@ -35,7 +35,7 @@ $role_filter = $_GET['role'] ?? '';
 				Tìm kiếm
 			</button>
 			<a href="<?= BASE_URL ?>/admin/users" class="px-5 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition">
-				
+				Đặt lại
 			</a>
 		</form>
 	</div>

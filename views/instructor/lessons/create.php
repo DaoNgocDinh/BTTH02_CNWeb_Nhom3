@@ -37,7 +37,7 @@ require_once __DIR__ . '/../../layouts/sidebar.php';
 					<button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition">
 						Thêm bài học
 					</button>
-					<a href="<?= BASE_URL ?>/instructor/lesson/manage" class="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition">
+					<a href="<?= BASE_URL ?>/instructor/course/<?= $course_id ?>/lessons" class="px-6 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition">
 						Hủy
 					</a>
 				</div>

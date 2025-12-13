@@ -74,7 +74,8 @@ class Enrollment
         $stmt = $db->prepare($query);
         return $stmt->execute([$id]);
     }
-    public static function getEnrollmentByUserID($userId) {
+    public static function getEnrollmentByUserID($userId)
+    {
         $pdo = Database::connect();
 
         try {
@@ -87,7 +88,8 @@ class Enrollment
         }
     }
 
-    public static function updateActiveToCompleted($userId, $courseId) {
+    public static function updateActiveToCompleted($userId, $courseId)
+    {
         $pdo = Database::connect();
 
         try {
@@ -102,7 +104,8 @@ class Enrollment
         }
     }
 
-    public static function dropCourse($userId, $courseId) {
+    public static function dropCourse($userId, $courseId)
+    {
         $pdo = Database::connect();
 
         try {
@@ -117,7 +120,8 @@ class Enrollment
         }
     }
 
-    public static function activeCourses($userId, $courseId) {
+    public static function activeCourses($userId, $courseId)
+    {
         $pdo = Database::connect();
 
         try {
@@ -131,7 +135,8 @@ class Enrollment
         }
     }
 
-    public static function updateDropToActive($userId, $courseId) {
+    public static function updateDropToActive($userId, $courseId)
+    {
         $pdo = Database::connect();
 
         try {
@@ -146,63 +151,80 @@ class Enrollment
         }
     }
 
-    public static function getStatus($userId, $courseId) {
-    $pdo = Database::connect();
-    $sql = "SELECT status 
+    public static function getStatus($userId, $courseId)
+    {
+        $pdo = Database::connect();
+        $sql = "SELECT status 
             FROM enrollments 
             WHERE student_id = ? AND course_id = ?
             LIMIT 1";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userId, $courseId]);
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $result['status'] ?? null;
-}
-
-    public static function getProgressByTime($userId, $courseId) {
-    $pdo = Database::connect();
-
-    $sql = "SELECT enrolled_date, status FROM enrollments WHERE student_id = ? AND course_id = ? LIMIT 1";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userId, $courseId]);
-    $enroll = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$enroll || empty($enroll['enrolled_date'])) {
-        return 0;
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userId, $courseId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['status'] ?? null;
     }
 
-    $status = $enroll['status'] ?? null;
+    public static function getProgressByTime($userId, $courseId)
+    {
+        $pdo = Database::connect();
 
-    if ($status === 'completed') {
-        return 100;
-    }
+        $sql = "SELECT enrolled_date, status FROM enrollments WHERE student_id = ? AND course_id = ? LIMIT 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$userId, $courseId]);
+        $enroll = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $enrollTime = strtotime($enroll['enrolled_date']);
-
-    $sqlCourse = "SELECT duration_weeks FROM courses WHERE id = ? LIMIT 1";
-    $stmtCourse = $pdo->prepare($sqlCourse);
-    $stmtCourse->execute([$courseId]);
-    $course = $stmtCourse->fetch(PDO::FETCH_ASSOC);
-
-    if (!$course || empty($course['duration_weeks'])) {
-        return 0;
-    }
-
-    $durationSeconds = $course['duration_weeks'] * 7 * 24 * 60 * 60;
-
-    $now = time();
-
-    $progress = (($now - $enrollTime) / $durationSeconds) * 100;
-
-    if ($progress >= 100) {
-        $progress = 100;
-        if ($status === 'active') {
-            self::updateActiveToCompleted($userId, $courseId);
+        if (!$enroll || empty($enroll['enrolled_date'])) {
+            return 0;
         }
-    } elseif ($progress < 0) {
-        $progress = 0;
-    }
 
-    return round($progress, 2);
+        $status = $enroll['status'] ?? null;
+
+        if ($status === 'completed') {
+            return 100;
+        }
+
+        $enrollTime = strtotime($enroll['enrolled_date']);
+
+        $sqlCourse = "SELECT duration_weeks FROM courses WHERE id = ? LIMIT 1";
+        $stmtCourse = $pdo->prepare($sqlCourse);
+        $stmtCourse->execute([$courseId]);
+        $course = $stmtCourse->fetch(PDO::FETCH_ASSOC);
+
+        if (!$course || empty($course['duration_weeks'])) {
+            return 0;
+        }
+
+        $durationSeconds = $course['duration_weeks'] * 7 * 24 * 60 * 60;
+
+        $now = time();
+
+        $progress = (($now - $enrollTime) / $durationSeconds) * 100;
+
+        if ($progress >= 100) {
+            $progress = 100;
+            if ($status === 'active') {
+                self::updateActiveToCompleted($userId, $courseId);
+            }
+        } elseif ($progress < 0) {
+            $progress = 0;
+        }
+
+        return round($progress, 2);
+    }
+    public static function isEnrolled($studentId, $courseId)
+{
+    $db = Database::connect();
+
+    $sql = "SELECT COUNT(*) 
+            FROM enrollments 
+            WHERE student_id = ? 
+              AND course_id = ?
+              AND status = 'active'";
+
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$studentId, $courseId]);
+
+    return $stmt->fetchColumn() > 0;
 }
 
 }

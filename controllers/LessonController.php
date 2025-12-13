@@ -2,6 +2,7 @@
 require_once 'models/Lesson.php';
 require_once 'models/Material.php';
 require_once 'models/Course.php';
+require_once 'models/Enrollment.php';
 
 
 class LessonController
@@ -9,17 +10,16 @@ class LessonController
     private $lessonModel;
     private $materialModel;
     private $courseModel;
+    private $enrollmentModel;
+
 
     public function __construct()
     {
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] < 1) {
-            header('Location: /auth/login');
-            exit;
-        }
 
         $this->lessonModel   = new Lesson();
         $this->materialModel = new Material();
         $this->courseModel   = new Course();
+        $this->enrollmentModel = new Enrollment();
     }
 
     // Quản lý bài học của 1 khóa học
@@ -221,10 +221,34 @@ class LessonController
     }
 
     public function learn($lessonId)
-    {
-        $lesson = $this->lessonModel->find($lessonId);
-        $materials = $this->materialModel->getByLesson($lessonId);
-
-        require 'views/student/lesson_detail.php';
+{
+    $user = $_SESSION['user'] ?? null;
+    if (!$user) {
+        header('Location: ' . BASE_URL . '/login');
+        exit;
     }
+
+    $lesson = $this->lessonModel->find($lessonId);
+    if (!$lesson) {
+        die('Bài học không tồn tại');
+    }
+
+    $course = $this->courseModel->find($lesson->course_id);
+
+    // ✅ chỉ chặn nếu là SINH VIÊN nhưng CHƯA đăng ký
+    if ($user['role'] == 0) {
+        require_once 'models/Enrollment.php';
+        $enroll = new Enrollment();
+
+        if (!$enroll->isEnrolled($user['id'], $course->id)) {
+            die('Bạn chưa đăng ký khóa học này');
+        }
+    }
+
+    $materials = $this->materialModel->getByLesson($lessonId);
+
+    require 'views/student/lesson_detail.php';
+}
+
+    
 }

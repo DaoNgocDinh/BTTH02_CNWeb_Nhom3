@@ -8,7 +8,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
         <!-- Header -->
         <div class="mb-12">
             <div class="inline-block">
-                <h1 class="text-5xl md:text-5xl font-bold bg-gradient-to-r from-slate-700 to-amber-700 bg-clip-text text-transparent mb-4">
+                <h1 class="text-5xl md:text-5xl font-bold bg-gradient-to-r from-gray-400 to-gray-900 to-amber-700 bg-clip-text text-transparent mb-4">
                     Khóa học của tôi
                 </h1>
                 <div class="h-1 w-32 bg-gradient-to-r from-slate-700 to-amber-700 rounded-full"></div>
@@ -76,7 +76,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
                         <!-- BUTTON -->
                         <a 
                             href="<?= BASE_URL ?>/instructor/course/<?= $course->id ?>/lessons"
-                            class="w-full py-2 px-4 bg-gradient-to-r from-slate-700 to-amber-700 hover:from-slate-800 hover:to-amber-800 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-slate-400 active:scale-95 text-xs inline-block text-center mb-4 cursor-pointer border-0"
+                            class="w-full py-2 px-4 bg-gradient-to-r from-gray-400 to-gray-900 hover:from-slate-800 hover:to-amber-800 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-slate-400 active:scale-95 text-xs inline-block text-center mb-4 cursor-pointer border-0"
                         >
                             Xem bài học
                         </a>

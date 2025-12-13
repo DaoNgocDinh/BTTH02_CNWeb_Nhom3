@@ -12,12 +12,12 @@ require_once __DIR__ . '/../../layouts/sidebar.php';
 				<a href="<?= BASE_URL ?>/instructor/dashboard" class="text-slate-600 hover:text-slate-800 mb-2 inline-block">
 					← Quay lại Dashboard
 				</a>
-				<h1 class="text-4xl font-bold bg-gradient-to-r from-slate-700 to-amber-700 bg-clip-text text-transparent">
+				<h1 class="text-4xl font-bold bg-gradient-to-r from-gray-800 to-black to-amber-700 bg-clip-text text-transparent">
 					<?= htmlspecialchars($course->title) ?>
 				</h1>
 			</div>
 			<a href="<?= BASE_URL ?>/instructor/lesson/create/<?= $course->id ?>"
-			   class="px-6 py-3 bg-gradient-to-r from-slate-700 to-amber-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+			   class="px-6 py-3 bg-gradient-to-r from-gray-800 to-black to-amber-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition duration-300">
 				+ Thêm bài học
 			</a>
 		</div>
@@ -76,7 +76,7 @@ require_once __DIR__ . '/../../layouts/sidebar.php';
 										<label class="text-sm font-semibold text-slate-700">📎 Tài liệu:</label>
 										<input type="file" name="files[]" multiple class="text-sm border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500" />
 										<button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-200">
-											 Upload
+											 Tải tài liệu
 										</button>
 									</form>
 								</td>

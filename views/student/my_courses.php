@@ -19,25 +19,44 @@ require_once __DIR__ . '/../layouts/sidebar.php';
 
                 <?php $st = $course['status'] ?? null; ?>
 
-                <?php if ($st === 'active'): ?>
-    <div class="course-actions">
-        <span style="color: green; font-weight: bold;">Đang học</span>
+                <?php $st = $course['status'] ?? null; ?>
 
-        <a href="<?= BASE_URL ?>/learn/course/<?= $course['id'] ?>"
-           class="btn small"
-           style="background:#0d6efd;color:#fff">
-            Vào học
-        </a>
+                <div class="course-actions">
 
-        <form method="POST" action="<?= BASE_URL ?>/my-courses" style="display:inline">
-            <input type="hidden" name="course_id" value="<?= htmlspecialchars($course['id']) ?>">
-            <input type="hidden" name="redirect" value="<?= htmlspecialchars($_SERVER['REQUEST_URI']) ?>">
-            <button type="submit" name="action" value="drop" class="btn small">
-                Hủy môn học
-            </button>
-        </form>
-    </div>
-<?php endif; ?>
+                    <?php if ($st === 'active'): ?>
+                        <span style="color: #16a34a; font-weight: bold;">Đang học</span>
+
+                        <a href="<?= BASE_URL ?>/learn/course/<?= $course['id'] ?>"
+                            class="btn small"
+                            style="background:#0d6efd;color:#fff">
+                            Vào học
+                        </a>
+
+                        <form method="POST" action="<?= BASE_URL ?>/my-courses" style="display:inline">
+                            <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
+                            <input type="hidden" name="redirect" value="<?= $_SERVER['REQUEST_URI'] ?>">
+                            <button type="submit" name="action" value="drop" class="btn small">
+                                Hủy môn học
+                            </button>
+                        </form>
+
+                    <?php elseif ($st === 'dropper' || $st === 'dropped'): ?>
+                        <span style="color:#dc2626;font-weight:bold;">Đã hủy</span>
+
+                        <form method="POST" action="<?= BASE_URL ?>/my-courses" style="display:inline">
+                            <input type="hidden" name="course_id" value="<?= $course['id'] ?>">
+                            <input type="hidden" name="redirect" value="<?= $_SERVER['REQUEST_URI'] ?>">
+                            <button type="submit" name="action" value="reactivate" class="btn small">
+                                Tiếp tục học
+                            </button>
+                        </form>
+
+                    <?php elseif ($st === 'completed'): ?>
+                        <span style="color:#2563eb;font-weight:bold;">Đã hoàn thành</span>
+
+                    <?php endif; ?>
+
+                </div>
 
 
             </div>
@@ -46,6 +65,7 @@ require_once __DIR__ . '/../layouts/sidebar.php';
         <p>Bạn chưa đăng ký khóa học nào.</p>
     <?php endif; ?>
 </div>
+
 <style>
     .courses-list {
         display: flex;

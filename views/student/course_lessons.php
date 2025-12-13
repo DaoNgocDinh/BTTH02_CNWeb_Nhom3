@@ -13,7 +13,7 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
         <ul class="lesson-list">
             <?php foreach ($lessons as $lesson): ?>
                 <li>
-                    <a href="<?= BASE_URL ?>/learn/lesson/<?= $lesson->id ?>">
+                    <a href="<?= BASE_URL ?>/learn/lesson/<?= $lesson->id ?>">>
                         📘 <?= htmlspecialchars($lesson->title) ?>
                     </a>
                 </li>
@@ -23,8 +23,9 @@ $enrollmentStatusMap = $enrollmentStatusMap ?? [];
     
 </div>
 <style>
+
 .page-container {
-    display: flex;
+    display: flex; /* Kích hoạt Flexbox */
     min-height: 100vh;
 }
 .main-content {
@@ -46,7 +47,7 @@ body {
 h2 {
     color: #1c1c1c;
     padding-bottom: 10px;
-    border-bottom: 3px solid #131212ff;
+    border-bottom: 3px solid #141414ff;
     margin-top: 0;
     margin-bottom: 30px;
 }
