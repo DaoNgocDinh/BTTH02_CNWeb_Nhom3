@@ -23,7 +23,8 @@ class LessonController
     }
 
     // Quản lý bài học của 1 khóa học
-     public function index($courseId) {
+    public function index($courseId)
+    {
         $user = $_SESSION['user'] ?? null;
         if (!$user || $user['role'] < 1) {
             header('Location: ' . BASE_URL . '/login');
@@ -44,7 +45,7 @@ class LessonController
         require_once __DIR__ . '/../views/instructor/lessons/manage.php';
     }
 
-    
+
 
     // Form thêm bài học
     public function create($course_id)
@@ -88,101 +89,142 @@ class LessonController
     }
 
     // Cập nhật bài học
-    public function update($lesson_id) {
-    $lesson = $this->lessonModel->find($lesson_id);
-    if (!$lesson) die("Không có quyền!");
+    public function update($lesson_id)
+    {
+        $lesson = $this->lessonModel->find($lesson_id);
+        if (!$lesson) die("Không có quyền!");
 
-    $course_id = $lesson->course_id;
+        $course_id = $lesson->course_id;
 
-    $data = [
-        'title'     => trim($_POST['title']),
-        'content'   => $_POST['content'] ?? '',
-        'video_url' => $_POST['video_url'] ?? '',
-        'order'     => $_POST['order'] ?? 999
-    ];
+        $data = [
+            'title'     => trim($_POST['title']),
+            'content'   => $_POST['content'] ?? '',
+            'video_url' => $_POST['video_url'] ?? '',
+            'order'     => $_POST['order'] ?? 999
+        ];
 
-    if ($this->lessonModel->update($lesson_id, $data)) {
-        $_SESSION['success'] = "Cập nhật bài học thành công!";
-    } else {
-        $_SESSION['error'] = "Cập nhật thất bại!";
+        if ($this->lessonModel->update($lesson_id, $data)) {
+            $_SESSION['success'] = "Cập nhật bài học thành công!";
+        } else {
+            $_SESSION['error'] = "Cập nhật thất bại!";
+        }
+
+        // Quay về trang quản lý bài học cùng khóa
+        header("Location: " . BASE_URL . "/instructor/course/$course_id/lessons");
+        exit;
     }
-
-    // Quay về trang quản lý bài học cùng khóa
-    header("Location: " . BASE_URL . "/instructor/course/$course_id/lessons");
-    exit;
-}
 
 
     // Xóa bài học
-    public function delete($lesson_id) {
-    $lesson = $this->lessonModel->find($lesson_id);
-    if ($lesson) {
-        $course_id = $lesson->course_id;
-        $this->lessonModel->delete($lesson_id);
-        $_SESSION['success'] = "Xóa bài học thành công!";
-    }
+    public function delete($lesson_id)
+    {
+        $lesson = $this->lessonModel->find($lesson_id);
+        if ($lesson) {
+            $course_id = $lesson->course_id;
+            $this->lessonModel->delete($lesson_id);
+            $_SESSION['success'] = "Xóa bài học thành công!";
+        }
 
-    header("Location: " . BASE_URL . "/instructor/course/$course_id/lessons");
-    exit;
-}
+        header("Location: " . BASE_URL . "/instructor/course/$course_id/lessons");
+        exit;
+    }
 
 
     // Upload tài liệu cho bài học
-    public function uploadMaterial($lessonId)
-{
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        header("Location: " . BASE_URL);
+    public function upload($lessonId)
+    {
+        $user = $_SESSION['user'] ?? null;
+        if (!$user || $user['role'] < 1) {
+            header('Location: ' . BASE_URL . '/auth/login');
+            exit;
+        }
+
+        $lesson = $this->lessonModel->find($lessonId);
+        if (!$lesson) {
+            $_SESSION['error'] = "Bài học không tồn tại!";
+            header('Location: ' . BASE_URL . '/instructor/dashboard');
+            exit;
+        }
+
+        $course = $this->courseModel->find($lesson->course_id);
+        if (!$course) {
+            $_SESSION['error'] = "Khóa học không tồn tại!";
+            header('Location: ' . BASE_URL . '/instructor/dashboard');
+            exit;
+        }
+
+        if ($user['role'] == 1 && $course->instructor_id != $user['id']) {
+            $_SESSION['error'] = "Bạn không có quyền upload!";
+            header('Location: ' . BASE_URL . '/instructor/dashboard');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['files'])) {
+            $uploadDir = 'assets/uploads/lessons/';
+            if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+
+            $uploadedFiles = [];
+            $errors = [];
+
+            // Xử lý multiple files
+            foreach ($_FILES['files']['tmp_name'] as $key => $tmpName) {
+                if (!empty($tmpName) && $_FILES['files']['error'][$key] === UPLOAD_ERR_OK) {
+                    $originalName = $_FILES['files']['name'][$key];
+                    $fileName = time() . '_' . uniqid() . '_' . basename($originalName);
+                    $filePath = $uploadDir . $fileName;
+
+                    if (move_uploaded_file($tmpName, $filePath)) {
+                        try {
+                            // Lưu vào database
+                            $result = $this->materialModel->create([
+                                'lesson_id' => $lessonId,
+                                'file_path' => $filePath,
+                                'file_name' => $originalName,
+                                'file_type' => pathinfo($filePath, PATHINFO_EXTENSION),
+                                'created_at' => date('Y-m-d H:i:s')
+                            ]);
+
+                            if ($result) {
+                                $uploadedFiles[] = $originalName;
+                            } else {
+                                $errors[] = "Lỗi lưu DB: " . $originalName;
+                            }
+                        } catch (Exception $e) {
+                            $errors[] = "Lỗi lưu: " . $originalName . " (" . $e->getMessage() . ")";
+                        }
+                    } else {
+                        $errors[] = "Không thể upload: " . $originalName;
+                    }
+                } else if (!empty($tmpName)) {
+                    $errors[] = "Lỗi file: " . $_FILES['files']['name'][$key];
+                }
+            }
+
+            // Tạo message phù hợp
+            if (!empty($uploadedFiles)) {
+                $_SESSION['success'] = " Tải lên " . count($uploadedFiles) . " tệp thành công!";
+            }
+            if (!empty($errors)) {
+                $_SESSION['error'] = " " . implode(", ", $errors);
+            }
+            if (empty($uploadedFiles) && empty($errors)) {
+                $_SESSION['error'] = " Vui lòng chọn file để upload!";
+            }
+
+            header('Location: ' . BASE_URL . '/instructor/course/' . $course->id . '/lessons');
+            exit;
+        }
+
+        // Nếu không phải POST, redirect
+        header('Location: ' . BASE_URL . '/instructor/course/' . $course->id . '/lessons');
         exit;
     }
 
-    // 1. Lấy lesson
-    $lesson = $this->lessonModel->find($lessonId);
-    if (!$lesson) {
-        die("Bài học không tồn tại");
+    public function learn($lessonId)
+    {
+        $lesson = $this->lessonModel->find($lessonId);
+        $materials = $this->materialModel->getByLesson($lessonId);
+
+        require 'views/student/lesson_detail.php';
     }
-
-    $courseId = $lesson->course_id;
-
-    // 2. Kiểm tra file
-    if (!isset($_FILES['material']) || $_FILES['material']['error'] !== 0) {
-        $_SESSION['error'] = "Upload thất bại!";
-        header("Location: " . BASE_URL . "/instructor/course/$courseId/lessons");
-        exit;
-    }
-
-    // 3. Lưu file
-    $file = $_FILES['material'];
-    $fileName = time() . '_' . basename($file['name']);
-    $uploadDir = __DIR__ . '/../assets/uploads/materials/';
-    $uploadPath = $uploadDir . $fileName;
-
-    if (!move_uploaded_file($file['tmp_name'], $uploadPath)) {
-        $_SESSION['error'] = "Không thể lưu file!";
-        header("Location: " . BASE_URL . "/instructor/course/$courseId/lessons");
-        exit;
-    }
-
-    // 4. Lưu DB
-    $this->materialModel->create([
-        'lesson_id' => $lessonId,
-        'file_name' => $fileName,
-        'file_path' => 'assets/uploads/materials/' . $fileName
-    ]);
-
-    $_SESSION['success'] = "Tải tài liệu thành công!";
-
-    // ✅ 5. QUAY VỀ TRANG QUẢN LÝ BÀI HỌC
-    header("Location: " . BASE_URL . "/instructor/course/$courseId/lessons");
-    exit;
-}
-
-public function learn($lessonId)
-{
-    $lesson = $this->lessonModel->find($lessonId);
-    $materials = $this->materialModel->getByLesson($lessonId);
-
-    require 'views/student/lesson_detail.php';
-}
-
-
 }

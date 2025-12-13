@@ -121,6 +121,7 @@ try {
     $router->get('/learn/course/{id}', [CourseController::class, 'learn']);
     $router->get('/learn/lesson/{id}', [LessonController::class, 'learn']);
 
+    $router->post('/instructor/lesson/upload/{id}', [LessonController::class, 'upload']);
     // Dispatch the request
     $router->dispatch($_SERVER['REQUEST_METHOD'], $requestUri);
 } catch (Exception $e) {

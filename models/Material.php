@@ -14,13 +14,15 @@ class Material {
     }
 
     public function create($data) {
-        $sql = "INSERT INTO materials (lesson_id, file_name, file_path, created_at)
-                VALUES (?, ?, ?, NOW())";
-        $stmt = $this->db->prepare($sql);
+        $stmt = $this->db->prepare("INSERT INTO materials
+            (lesson_id, filename, file_path, file_type, uploaded_at)
+            VALUES (?, ?, ?, ?, ?)");
         return $stmt->execute([
             $data['lesson_id'],
             $data['file_name'],
-            $data['file_path']
+            $data['file_path'],
+            $data['file_type'],
+            $data['created_at'] ?? date('Y-m-d H:i:s')
         ]);
     }
 
