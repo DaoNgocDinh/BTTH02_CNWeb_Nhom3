@@ -1,7 +1,14 @@
 <nav class="navbar">
     <div class="navbar-container">
-
-        <a href="<?= BASE_URL ?>/" class="navbar-logo">
+        <?php
+        $user = $_SESSION['user'] ?? null;
+        if ($user && $user['role'] == 1) {
+            $homeLink = BASE_URL . '/instructor/dashboard';
+        } else {
+            $homeLink = BASE_URL . '/';
+        }
+        ?>
+        <a href="<?= $homeLink ?>" class="navbar-logo">
             65KTPM
         </a>
 
@@ -33,7 +40,7 @@
                 </a>
 
 
-                <?php elseif ($role == 2): ?>
+            <?php elseif ($role == 2): ?>
 
                 <a href="<?= BASE_URL ?>/admin/dashboard" class="nav-link">
                     📊 <span>Trang chủ</span>
@@ -76,7 +83,7 @@
 
                             <hr class="dropdown-hr">
                         </div>
-                        
+
                         <a href="<?= BASE_URL ?>/profile/change-avatar" class="dropdown-item">
                             🖼️ Thay đổi ảnh đại diện
                         </a>
@@ -91,17 +98,16 @@
                     </div>
                 </div>
 
-                
-                <?php elseif ($role == 1): ?>
-                
-                <a href="<?= BASE_URL ?>/" class="nav-link">
+
+            <?php elseif ($role == 1): ?>
+
+                <a href="<?= BASE_URL ?>/instructor/dashboard" class="nav-link">
                     📊 <span>Trang chủ</span>
                 </a>
 
                 <a href="<?= BASE_URL ?>/instructor/course/manage" class="nav-link">
                     📚 <span>Quản lý khóa học</span>
                 </a>
-                
                 <div class="user-menu-wrapper">
 
                     <div class="user-info-toggle">
@@ -139,7 +145,7 @@
                 </div>
 
 
-                <?php else: ?>
+            <?php else: ?>
 
                 <a href="<?= BASE_URL ?>/" class="nav-link">
                     🏠 <span>Trang chủ</span>

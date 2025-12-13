@@ -56,6 +56,9 @@ try {
     $router->get('/logout', [AuthController::class, 'logout']);
 
     // ====== COURSES (PUBLIC & STUDENT) ======
+    $router->get('/student/dashboard', [CourseController::class, 'studentDashboard']);
+    $router->get('/instructor/dashboard', [CourseController::class, 'instructorDashboard']);
+
     $router->get('/my-courses', [CourseController::class, 'myCourses']);
     $router->get('/courses', [CourseController::class, 'browse']);
     $router->get('/courses/{id}', [CourseController::class, 'show']);

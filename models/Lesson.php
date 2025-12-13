@@ -13,6 +13,7 @@ class Lesson {
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
+
     public function create($data) {
         $stmt = $this->db->prepare("INSERT INTO lessons
             (course_id, title, content, video_url, `order`, created_at)

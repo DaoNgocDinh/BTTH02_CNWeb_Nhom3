@@ -41,6 +41,7 @@ class CourseController
         require 'views/instructor/course.php';
     }
 
+    
     // Danh sách quản lý khóa học (cho cả admin và instructor)
     public function manage()
     {
@@ -69,7 +70,7 @@ class CourseController
     // Public course detail
     public function show($id)
     {
-        $course = $this->courseModel->find($id);
+        $course = $this->courseModel->getInfoCourseByCID($id);
         if (!$course) {
             http_response_code(404);
             echo "<h1>Course not found</h1>";
@@ -95,10 +96,12 @@ class CourseController
         }
 
         $uploadDir = 'assets/uploads/courses/';
+        
         // Tạo thư mục nếu không tồn tại
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
+        
         $imageName = 'default.jpg'; // ảnh mặc định
 
         if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
@@ -142,6 +145,7 @@ class CourseController
         // Kiểm tra quyền sở hữu (instructor) hoặc admin
         $isAdmin = $_SESSION['user']['role'] == 2;
         $isOwner = $course && $course->instructor_id == $_SESSION['user']['id'];
+        
         if (!$course || (!$isAdmin && !$isOwner)) {
             $_SESSION['error'] = "Không có quyền truy cập!";
             header('Location: ' . BASE_URL . '/instructor/course/manage');
@@ -166,6 +170,7 @@ class CourseController
         }
 
         $uploadDir = 'assets/uploads/courses/';
+        
         // Tạo thư mục nếu không tồn tại
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
@@ -293,6 +298,44 @@ class CourseController
     }
 
     require 'views/instructor/dashboard.php';
+}
+
+    public function instructorDashboard() {
+    // Kiểm tra đăng nhập & role giảng viên
+    if (!isset($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
+        header('Location: ' . BASE_URL . '/login');
+        exit;
+    }
+
+    $instructorId = $_SESSION['user']['id'];
+
+    // Lấy tất cả khóa học của giảng viên
+    $courseModel = new Course();
+    $courses = $courseModel->getByInstructor($instructorId); // trả về array of objects
+
+    // Lấy học viên đăng ký cho từng khóa học
+    $coursesWithStudents = [];
+    $db = new Database();
+    $conn = $db->connect();
+
+    foreach ($courses as $course) {
+        $stmt = $conn->prepare("
+            SELECT u.fullname, u.email
+            FROM enrollments e
+            JOIN users u ON e.student_id = u.id
+            WHERE e.course_id = ?
+        ");
+        $stmt->execute([$course->id]);
+        $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $coursesWithStudents[] = [
+            'course' => $course,
+            'students' => $students
+        ];
+    }
+
+    // Gọi view dashboard
+    require_once __DIR__ . '/../views/instructor/dashboard.php';
 }
 
 }

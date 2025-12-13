@@ -91,7 +91,10 @@ class AuthController {
         // Đăng nhập xong chuyển hướng đến dashboard admin hoặc home
         if ($user['role'] == 2) {
             header('Location: ' . BASE_URL . '/admin/dashboard');
-        } else {
+        }
+        if ($user['role'] == 1) { // Giảng viên
+    header('Location: ' . BASE_URL . '/instructor/dashboard');
+} else {
             header('Location: ' . BASE_URL . '/');
         }
         exit;

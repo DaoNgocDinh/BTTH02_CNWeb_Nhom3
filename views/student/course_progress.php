@@ -67,6 +67,7 @@ h2 {
     border-radius: 12px;
     padding: 15px 25px;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: box-shadow 0.3s ease;
@@ -95,7 +96,7 @@ h2 {
 
 .course-progress-item p {
     position: absolute; 
-    margin: 0;
+    margin: 30px;
     font-size: 0.9rem;
     color: #010b13ff;
     left: 115px; 

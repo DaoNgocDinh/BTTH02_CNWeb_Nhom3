@@ -1,53 +1,37 @@
-<?php
-// Categories list view
-$title = 'Manage Categories';
-require_once __DIR__ . '/../../views/layouts/header.php';
-?>
+<?php require_once __DIR__ . '/../../layouts/header.php'; 
+require_once __DIR__ . '/../../layouts/sidebar.php';?>
 
-<div class="flex">
-	<aside class="w-64 bg-gray-900 text-white p-6 hidden md:block">
-		<h2 class="text-xl font-bold mb-2">Admin</h2>
-		<nav class="space-y-2">
-			<a href="/<?= basename(__DIR__) ?>/admin/dashboard" class="block px-3 py-2 rounded hover:bg-gray-800">📊 Dashboard</a>
-			<a href="/<?= basename(__DIR__) ?>/admin/users" class="block px-3 py-2 rounded hover:bg-gray-800">👥 Users</a>
-			<a href="/<?= basename(__DIR__) ?>/admin/categories" class="block px-3 py-2 rounded hover:bg-gray-800">📂 Categories</a>
-			<a href="/<?= basename(__DIR__) ?>/admin/statistics" class="block px-3 py-2 rounded hover:bg-gray-800">📈 Statistics</a>
-			<a href="/<?= basename(__DIR__) ?>/logout" class="block px-3 py-2 mt-4 text-red-400 hover:bg-red-900">Logout</a>
-		</nav>
-	</aside>
+<div class="container mt-4">
+    <h1>Quản lý thể loại</h1>
 
-	<main class="flex-1 p-6">
-		<h1 class="text-2xl font-bold mb-6">Categories</h1>
+    <a href="<?= BASE_URL ?>/admin/categories/create" class="btn btn-primary mb-3">➕ Thêm thể loại</a>
 
-		<?php if (!empty($categories)): ?>
-			<div class="bg-white rounded shadow overflow-auto">
-				<table class="w-full text-left">
-					<thead class="bg-gray-50 border-b">
-						<tr>
-							<th class="px-4 py-3">ID</th>
-							<th class="px-4 py-3">Name</th>
-							<th class="px-4 py-3">Description</th>
-							<th class="px-4 py-3">Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ($categories as $cat): ?>
-							<tr class="border-b hover:bg-gray-50">
-								<td class="px-4 py-3"><?= htmlspecialchars($cat['id'] ?? '') ?></td>
-								<td class="px-4 py-3 font-semibold"><?= htmlspecialchars($cat['name'] ?? '') ?></td>
-								<td class="px-4 py-3 text-gray-600"><?= htmlspecialchars(substr($cat['description'] ?? '', 0, 80)) ?></td>
-								<td class="px-4 py-3">
-									<a href="/<?= basename(__DIR__) ?>/admin/categories/<?= $cat['id'] ?>/edit" class="text-blue-600 hover:underline">Edit</a>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table>
-			</div>
-		<?php else: ?>
-			<div class="bg-white p-6 rounded shadow text-center text-gray-600">No categories found.</div>
-		<?php endif; ?>
-	</main>
+    <?php if (!empty($_SESSION['flash'])): ?>
+        <div class="alert alert-success"><?= $_SESSION['flash'] ?></div>
+        <?php unset($_SESSION['flash']); ?>
+    <?php endif; ?>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên thể loại</th>
+                <th>Mô tả</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($categories as $cat): ?>
+                <tr>
+                    <td><?= $cat['id'] ?></td>
+                    <td><?= htmlspecialchars($cat['name']) ?></td>
+                    <td><?= htmlspecialchars($cat['description']) ?></td>
+                    <td>
+                        <a href="<?= BASE_URL ?>/admin/categories/<?= $cat['id'] ?>/edit" class="btn btn-warning btn-sm">✏️ Sửa</a>
+                        <a href="<?= BASE_URL ?>/admin/categories/<?= $cat['id'] ?>/delete" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa?')">🗑️ Xóa</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
-
-<?php require_once __DIR__ . '/../../views/layouts/footer.php'; ?>
