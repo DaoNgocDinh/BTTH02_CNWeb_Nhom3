@@ -1,8 +1,16 @@
 <?php
 $title = 'Edit User';
 require_once __DIR__ . '/../../layouts/header.php';
+
+// Lưu user cần edit vào biến khác trước khi sidebar ghi đè
+$editUser = $user ?? null;
+
 require_once __DIR__ . '/../../layouts/sidebar.php';
+
+// Khôi phục user cần edit
+$user = $editUser;
 ?>
+
 
 <main class="p-8 bg-gray-100 min-h-screen">
 	<div class="max-w-2xl mx-auto">

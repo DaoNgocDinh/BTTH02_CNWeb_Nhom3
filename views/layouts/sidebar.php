@@ -65,8 +65,6 @@
                 <div class="user-menu-wrapper">
 
                     <div class="user-info-toggle">
-                        <img src="<?= htmlspecialchars($user['avatar_url'] ?? 'default_avatar.png') ?>"
-                            class="user-avatar">
 
                         <span class="user-name">
                             <?= htmlspecialchars($user['username']) ?>
@@ -84,12 +82,8 @@
                             <hr class="dropdown-hr">
                         </div>
 
-                        <a href="<?= BASE_URL ?>/profile/change-avatar" class="dropdown-item">
-                            🖼️ Thay đổi ảnh đại diện
-                        </a>
-
-                        <a href="<?= BASE_URL ?>/profile/info" class="dropdown-item">
-                            ⚙️ Thông tin
+                        <a href="<?= BASE_URL ?>/profile" class="dropdown-item">
+                            ⚙️ Thông tin cá nhân
                         </a>
 
                         <a href="<?= BASE_URL ?>/logout" class="dropdown-item logout-link">
@@ -112,9 +106,7 @@
                 <div class="user-menu-wrapper">
 
                     <div class="user-info-toggle">
-                        <img src="<?= htmlspecialchars($user['avatar_url'] ?? 'default_avatar.png') ?>"
-                            class="user-avatar">
-
+                        <span>Tôi:</span>
                         <span class="user-name">
                             <?= htmlspecialchars($user['username']) ?>
                         </span>
@@ -131,12 +123,8 @@
                             <hr class="dropdown-hr">
                         </div>
 
-                        <a href="<?= BASE_URL ?>/profile/change-avatar" class="dropdown-item">
-                            🖼️ Thay đổi ảnh đại diện
-                        </a>
-
-                        <a href="<?= BASE_URL ?>/profile/info" class="dropdown-item">
-                            ⚙️ Thông tin
+                        <a href="<?= BASE_URL ?>/profile" class="dropdown-item">
+                            ⚙️ Thông tin cá nhân
                         </a>
 
                         <a href="<?= BASE_URL ?>/logout" class="dropdown-item logout-link">
@@ -163,9 +151,7 @@
                 <div class="user-menu-wrapper">
 
                     <div class="user-info-toggle">
-                        <img src="<?= htmlspecialchars($user['avatar_url'] ?? 'default_avatar.png') ?>"
-                            class="user-avatar">
-
+                        
                         <span class="user-name">
                             <?= htmlspecialchars($user['username']) ?>
                         </span>
@@ -181,12 +167,9 @@
 
                             <hr class="dropdown-hr">
                         </div>
-                        <a href="<?= BASE_URL ?>/profile/change-avatar" class="dropdown-item">
-                            🖼️ Thay đổi ảnh đại diện
-                        </a>
 
-                        <a href="<?= BASE_URL ?>/profile/info" class="dropdown-item">
-                            ⚙️ Thông tin
+                        <a href="<?= BASE_URL ?>/profile" class="dropdown-item">
+                            ⚙️ Thông tin cá nhân
                         </a>
 
                         <a href="<?= BASE_URL ?>/logout" class="dropdown-item logout-link">

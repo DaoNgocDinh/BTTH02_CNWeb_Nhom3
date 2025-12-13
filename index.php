@@ -24,6 +24,8 @@ require_once __DIR__ . "/controllers/CourseController.php";
 require_once __DIR__ . "/controllers/LessonController.php";
 require_once __DIR__ . "/controllers/EnrollmentController.php";
 require_once __DIR__ . "/middleware/Auth_JWT.php";
+require_once __DIR__ . "/controllers/ProfileController.php";
+
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -54,6 +56,8 @@ try {
     $router->get('/register', [AuthController::class, 'showRegister']);
     $router->post('/register', [AuthController::class, 'register']);
     $router->get('/logout', [AuthController::class, 'logout']);
+$router->get('/profile', [ProfileController::class, 'show']);
+
 
     // ====== COURSES (PUBLIC & STUDENT) ======
     $router->get('/student/dashboard', [CourseController::class, 'studentDashboard']);

@@ -12,6 +12,7 @@ class HomeController
         // Load courses for homepage (public). If user logged in, also load enrollment status.
         require_once __DIR__ . '/../models/Course.php';
         require_once __DIR__ . '/../models/Enrollment.php';
+        require_once __DIR__ . '/../models/User.php';
 
         $courseModel = new Course();
         $coursesRaw = $courseModel->getAll(); // returns array of objects
