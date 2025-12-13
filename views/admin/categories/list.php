@@ -8,11 +8,11 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 	<aside class="w-64 bg-gray-900 text-white p-6 hidden md:block">
 		<h2 class="text-xl font-bold mb-2">Admin</h2>
 		<nav class="space-y-2">
-			<a href="/BTTH02_CNWeb_Nhom3/admin/dashboard" class="block px-3 py-2 rounded hover:bg-gray-800">📊 Dashboard</a>
-			<a href="/BTTH02_CNWeb_Nhom3/admin/users" class="block px-3 py-2 rounded hover:bg-gray-800">👥 Users</a>
-			<a href="/BTTH02_CNWeb_Nhom3/admin/categories" class="block px-3 py-2 rounded hover:bg-gray-800">📂 Categories</a>
-			<a href="/BTTH02_CNWeb_Nhom3/admin/statistics" class="block px-3 py-2 rounded hover:bg-gray-800">📈 Statistics</a>
-			<a href="/BTTH02_CNWeb_Nhom3/logout" class="block px-3 py-2 mt-4 text-red-400 hover:bg-red-900">Logout</a>
+			<a href="/<?= basename(__DIR__) ?>/admin/dashboard" class="block px-3 py-2 rounded hover:bg-gray-800">📊 Dashboard</a>
+			<a href="/<?= basename(__DIR__) ?>/admin/users" class="block px-3 py-2 rounded hover:bg-gray-800">👥 Users</a>
+			<a href="/<?= basename(__DIR__) ?>/admin/categories" class="block px-3 py-2 rounded hover:bg-gray-800">📂 Categories</a>
+			<a href="/<?= basename(__DIR__) ?>/admin/statistics" class="block px-3 py-2 rounded hover:bg-gray-800">📈 Statistics</a>
+			<a href="/<?= basename(__DIR__) ?>/logout" class="block px-3 py-2 mt-4 text-red-400 hover:bg-red-900">Logout</a>
 		</nav>
 	</aside>
 
@@ -37,7 +37,7 @@ require_once __DIR__ . '/../../views/layouts/header.php';
 								<td class="px-4 py-3 font-semibold"><?= htmlspecialchars($cat['name'] ?? '') ?></td>
 								<td class="px-4 py-3 text-gray-600"><?= htmlspecialchars(substr($cat['description'] ?? '', 0, 80)) ?></td>
 								<td class="px-4 py-3">
-									<a href="/BTTH02_CNWeb_Nhom3/admin/categories/<?= $cat['id'] ?>/edit" class="text-blue-600 hover:underline">Edit</a>
+									<a href="/<?= basename(__DIR__) ?>/admin/categories/<?= $cat['id'] ?>/edit" class="text-blue-600 hover:underline">Edit</a>
 								</td>
 							</tr>
 						<?php endforeach; ?>

@@ -41,7 +41,6 @@ class CourseController
         require 'views/instructor/course.php';
     }
 
-
     // Danh sách quản lý khóa học (cho cả admin và instructor)
     public function manage()
     {
@@ -96,12 +95,10 @@ class CourseController
         }
 
         $uploadDir = 'assets/uploads/courses/';
-
         // Tạo thư mục nếu không tồn tại
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
-
         $imageName = 'default.jpg'; // ảnh mặc định
 
         if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
@@ -145,7 +142,6 @@ class CourseController
         // Kiểm tra quyền sở hữu (instructor) hoặc admin
         $isAdmin = $_SESSION['user']['role'] == 2;
         $isOwner = $course && $course->instructor_id == $_SESSION['user']['id'];
-
         if (!$course || (!$isAdmin && !$isOwner)) {
             $_SESSION['error'] = "Không có quyền truy cập!";
             header('Location: ' . BASE_URL . '/instructor/course/manage');
@@ -170,7 +166,6 @@ class CourseController
         }
 
         $uploadDir = 'assets/uploads/courses/';
-
         // Tạo thư mục nếu không tồn tại
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
